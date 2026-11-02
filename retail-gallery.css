@@ -1,0 +1,101 @@
+.approved-company .retail-highlights.retail-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 64px);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 72px 0 40px;
+  background: #fff;
+  color: #111;
+  overflow: visible;
+}
+
+.retail-collection { min-width: 0; }
+.retail-collection__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 clamp(20px, 1.8vw, 36px);
+  padding: 0;
+}
+.retail-collection__header h2 {
+  margin: 0;
+  font: 600 clamp(22px, 2.15vw, 44px)/1.2 Helvetica, Arial, sans-serif;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+}
+.retail-collection__photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, .9vw, 18px); }
+.retail-collection__photos figure { min-width: 0; margin: 0; aspect-ratio: 10/17; border-radius: 10px; overflow: hidden; background: #dedede; }
+.retail-collection__photos img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+
+@media (max-width: 900px) {
+  .approved-company .retail-highlights.retail-gallery { grid-template-columns: 1fr; gap: 40px; padding-top: 48px; }
+  .retail-collection__header h2 { font-size: clamp(20px, 5.5vw, 32px); }
+}
+@media (max-width: 400px) {
+  .retail-collection__header h2 { font-size: 20px; }
+  .retail-collection__photos { gap: 8px; }
+}
+
+.retail-collection__photos figure{position:relative}
+
+/* 10/19: buttons removed; each row is a carousel with arrow buttons and 2-line hover captions. */
+.retail-collection__header { min-height: 1.2em; }
+.retail-carousel { position: relative; }
+.retail-collection__photos { display: grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: calc((100% - 2 * clamp(10px, .9vw, 18px)) / 3); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.retail-collection__photos::-webkit-scrollbar { display: none; }
+.retail-collection__photos:focus-visible { outline: 2px solid #e60012; outline-offset: 4px; border-radius: 10px; }
+.retail-collection__photos figure { position: relative; scroll-snap-align: start; }
+.retail-collection__photos img { transition: transform .5s cubic-bezier(.22,.61,.36,1); }
+.retail-collection__photos figcaption {
+  position: absolute; inset: auto 0 0; display: grid; gap: 2px; padding: 44px 14px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,.7), rgba(0,0,0,0));
+  color: #fff; letter-spacing: -.02em; pointer-events: none;
+  opacity: 0; transform: translateY(8px); transition: opacity .3s ease, transform .3s ease;
+}
+.retail-collection__photos figcaption > * { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.retail-collection__photos figcaption strong { font-size: clamp(13px, .95vw, 15px); font-weight: 600; line-height: 1.4; }
+.retail-collection__photos figcaption span { font-size: clamp(11px, .8vw, 13px); font-weight: 400; line-height: 1.45; color: rgba(255,255,255,.82); }
+.retail-collection__photos figure:hover figcaption, .retail-collection__photos figure:focus-within figcaption { opacity: 1; transform: none; }
+.retail-collection__photos figure:hover img { transform: scale(1.04); }
+@media (hover: none) { .retail-collection__photos figcaption { opacity: 1; transform: none; } }
+.retail-carousel__btn {
+  position: absolute; top: 50%; z-index: 2; display: grid; place-items: center;
+  width: 40px; height: 40px; margin-top: -20px; padding: 0; border: 0; border-radius: 50%;
+  background: rgba(255,255,255,.94); color: #111; box-shadow: 0 4px 14px rgba(0,0,0,.16); cursor: pointer;
+  transition: opacity .25s, transform .25s, background .2s;
+}
+.retail-carousel__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.retail-carousel__btn--prev { left: 10px; }
+.retail-carousel__btn--next { right: 10px; }
+.retail-carousel__btn:hover { background: #111; color: #fff; }
+.retail-carousel__btn:focus-visible { outline: 2px solid #e60012; outline-offset: 3px; }
+.retail-carousel__btn:disabled { opacity: 0; pointer-events: none; }
+@media (max-width: 600px) {
+  .retail-collection__photos { grid-auto-columns: calc((100% - 8px) / 2.2); }
+  .retail-carousel__btn { width: 34px; height: 34px; margin-top: -17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .retail-collection__photos img, .retail-collection__photos figcaption, .retail-carousel__btn { transition: none; }
+}
+.retail-collection__photos figure { aspect-ratio: 1080/1450; }
+
+/* Captions stay off the photos until hover, keyboard focus, or tap. */
+.retail-collection__photos figure{cursor:pointer}
+.retail-collection__photos figure:focus-visible{outline:2px solid #e60012;outline-offset:3px}
+.retail-collection__photos figure:is(:hover,:focus-visible,.is-caption-open) figcaption{opacity:1;transform:none}
+@media(hover:none){.retail-collection__photos figcaption{opacity:0;transform:translateY(8px)}.retail-collection__photos figure.is-caption-open figcaption{opacity:1;transform:none}}
+
+/* Captions stay off the photos until hover, keyboard focus, or tap. */
+.retail-collection__photos figure{cursor:pointer}
+.retail-collection__photos figure:focus-visible{outline:2px solid #e60012;outline-offset:3px}
+.retail-collection__photos figure:is(:hover,:focus-visible,.is-caption-open) figcaption{opacity:1;transform:none}
+@media(hover:none){.retail-collection__photos figcaption{opacity:0;transform:translateY(8px)}.retail-collection__photos figure.is-caption-open figcaption{opacity:1;transform:none}}
+
+/* Captions stay off the photos until hover, keyboard focus, or tap. */
+.retail-collection__photos figure{cursor:pointer}
+.retail-collection__photos figure:focus-visible{outline:2px solid #e60012;outline-offset:3px}
+.retail-collection__photos figure:is(:hover,:focus-visible,.is-caption-open) figcaption{opacity:1;transform:none}
+@media(hover:none){.retail-collection__photos figcaption{opacity:0;transform:translateY(8px)}.retail-collection__photos figure.is-caption-open figcaption{opacity:1;transform:none}}

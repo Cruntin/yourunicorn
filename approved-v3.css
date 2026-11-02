@@ -1,0 +1,997 @@
+/* 3차 수정 (10/29) — Figma 리뷰 코멘트 반영. approved.css 뒤에 로드된다. */
+
+/* ---------- 공통: 고정 줄바꿈 블록 ---------- */
+.fx-fixed .fx-line,.cx-fixed .fx-line{display:block}
+.fx-fixed .fx-gap,.cx-fixed .fx-gap{display:block;height:.9em}
+.fx-fixed,.cx-fixed{word-break:keep-all;overflow-wrap:anywhere}
+/* 일하는 방식 카드: 모든 비율에서 같은 줄에서 끊기도록 한 줄 고정 + 넘치면 카드 폭에 맞춰 살짝 축소 (approved-v3.js) */
+.approved-culture .cx-card__more p.cx-fixed{font-size:calc(16px * var(--fx-scale,1))!important;line-height:1.7}
+.approved-culture .cx-card__more p.cx-fixed .fx-line{white-space:nowrap}
+@media(max-width:700px){
+ .fx-fixed .fx-line,.cx-fixed .fx-line{display:inline;white-space:normal}
+ .fx-fixed .fx-line:not(:last-child):after,.cx-fixed .fx-line:not(:last-child):after{content:' '}
+ .fx-fixed .fx-gap{height:.8em}
+ .approved-culture .cx-card__more p.cx-fixed .fx-line{white-space:normal}
+}
+
+/* ---------- 메인: 제품 ---------- */
+/* M3: 제품샷 하단의 작은 영문 캡션 제거 (우측 제목으로 충분) */
+.approved-company .product-face-front .project-caption{display:none!important}
+/* M1: 첫 번째 쉐이크 카드 제목이 모니터에 따라 잘리던 문제 — 넘치면 줄바꿈 허용 */
+.approved-company .unicorn-stack-detail,.approved-company .unicorn-stack-title{overflow:visible}
+.approved-company .unicorn-stack-detail h3,.approved-company .unicorn-stack-detail .unicorn-stack-name{white-space:normal;overflow-wrap:anywhere;word-break:keep-all}
+.approved-company .product-face-back h3{white-space:normal;overflow-wrap:anywhere}
+
+/* ---------- 메인: 성과 카드 ---------- */
+/* M6: 'TURNS OUT…' 라벨을 더 또렷하게 */
+.feedback-v2 .growth-cascade>.growth-tags-heading>p{font-size:clamp(14px,1.2vw,19px)!important;font-weight:600!important;letter-spacing:.02em;line-height:1.4;color:#111}
+/* M6: 올리브영 로고 확 키우기 */
+.feedback-v2 .metric-rank .approved-olive-logo{width:36%;right:3.5%;bottom:9%}
+/* M10: 좌상단(현재 우상단) 영문 문구를 더 비중 있게 */
+.feedback-v2 .growth-cascade-card[data-metric] .growth-sticker{font-size:clamp(13px,1.15vw,18px);font-weight:600;letter-spacing:.01em;max-width:34%;right:3.5%;top:6.5%}
+.feedback-v2 .growth-cascade-card .sticker-face{opacity:.92}
+.feedback-v2 .metric-revenue[data-metric] .growth-sticker,.feedback-v2 .metric-revenue[data-metric] .sticker-face{color:rgba(255,255,255,.85)}
+/* M11: 단위(개 매장, 만 개) 키우고, 설명문은 숫자 바로 아래 같은 왼쪽선에 (Figma '수정' 시안) */
+.feedback-v2 .growth-cascade-card .cascade-number{top:7%}
+.feedback-v2 .growth-cascade-card .metric-unit{font-size:clamp(24px,2.6vw,40px);font-weight:600;margin-top:clamp(10px,1.2vw,18px)}
+.feedback-v2 .growth-cascade-card[data-metric] .cascade-description{bottom:auto;top:calc(7% + clamp(80px,10vw,152px) + clamp(18px,2.2vw,34px));width:38%;font-size:clamp(17px,1.65vw,27px);font-weight:600;letter-spacing:-.02em}
+.feedback-v2 .growth-cascade-card[data-metric] .cascade-description p{line-height:1.42}
+.feedback-v2 .growth-cascade-card[data-metric] .cascade-description br{display:block}
+/* M10: 일러스트 톤을 조금 밝게 */
+html body .growth-cascade-card .growth-ill-rank{background:#4a4a48}
+html body .growth-cascade-card .growth-ill-stores{background:#bcbcbc}
+html body .growth-cascade-card .growth-ill-global{background:#d40606}
+html body .growth-cascade-card .growth-ill-sold{background:#a6a6a6} /* 3차: 피그마 밝은 코인 에셋 배경과 맞춤 */
+html body .growth-cascade-card .growth-ill-revenue{background:#3b3b3b}
+html body .growth-cascade-card .growth-ill .growth-art{filter:brightness(1.08)}
+/* M5: 1,300만 개 카드 — 맨 위 코인을 크런틴 심볼(평면)로 교체 */
+html body .growth-ill-sold .ill-coin-symbol{display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 10px 14px rgba(0,0,0,.18))}
+html body .growth-ill-sold .ill-coin-symbol img{width:100%;height:auto;transform:none}
+html body .growth-ill-sold .ill-coin-symbol{opacity:0;transform:translateY(-40px) rotate(-6deg)}
+html body .is-ill-play .growth-ill-sold .ill-coin-symbol{opacity:1;transform:none;transition:transform .9s cubic-bezier(.22,1,.36,1) .9s,opacity .5s ease .9s}
+@media(prefers-reduced-motion:reduce){html body .growth-ill-sold .ill-coin-symbol{opacity:1;transform:none;transition:none}}
+@media(max-width:600px){
+ .feedback-v2 .growth-cascade-card .cascade-number{top:12%}
+ .feedback-v2 .growth-cascade-card .metric-unit{font-size:22px;margin-top:8px}
+ .feedback-v2 .growth-cascade-card[data-metric] .cascade-description{top:calc(12% + clamp(62px,17vw,90px) + 18px);width:62%;font-size:16px}
+ .feedback-v2 .metric-sold[data-metric] .cascade-description,.feedback-v2 .metric-revenue[data-metric] .cascade-description{top:calc(12% + clamp(62px,17vw,90px) + 18px)}
+ .feedback-v2 .growth-cascade-card[data-metric] .growth-sticker{font-size:11px;max-width:60%}
+ .feedback-v2 .metric-rank .approved-olive-logo{width:52%;bottom:9%}
+}
+
+/* ---------- 메인: Our Vision ---------- */
+/* M12: 'Our Vision' 라벨과 한글 문장을 더 크고 굵게 */
+.approved-company .pb-statement--darken .mono.vis-line{font-size:clamp(14px,1.25vw,20px);font-weight:600;letter-spacing:.04em}
+.approved-company .pb-statement .pb-ko{font-size:clamp(20px,2vw,32px)!important;font-weight:600!important;letter-spacing:-.02em;margin-top:clamp(28px,3vw,44px)}
+
+/* ---------- 메인: 글로벌 ---------- */
+/* M13: 섹션 끝단 여백 추가 (영상 3번째 줄이 화면 끝에 딱 붙지 않도록) */
+.approved-company .global-cities-section{padding-bottom:clamp(64px,7vw,120px)!important}
+
+/* ---------- 메인: 마지막 CTA ---------- */
+/* M14: See how we work 버튼에 화살표 */
+.approved-company .pb-next__btn{display:inline-flex;align-items:center;gap:10px}
+.approved-company .pb-next__btn .approved-cta-arrow{width:16px;height:16px;flex:none}
+
+/* ---------- 컬처 ---------- */
+/* C4: Our Team 섹션 설명문 크기를 복지혜택 설명문과 동일하게 */
+.approved-culture .approved-team-intro .art-lead{font-size:var(--type-lead)!important;line-height:1.5!important;color:#111!important}
+/* C5: 상세 설명문 시작점을 한줄 설명문(2번째 컬럼)과 맞춤 */
+@media(min-width:701px){
+ .approved-culture #team .acc__body>div{max-width:none;margin-left:calc(32% + clamp(24px,3vw,48px));margin-right:calc(24px + clamp(24px,3vw,48px))}
+}
+/* 인재상·팀 상세 설명문: 줄 단위 블록 + 폭에 따라 글자 크기 미세 조정으로 Figma와 같은 줄바꿈 유지 */
+.approved-culture .talent-detail p.fx-fixed,.approved-culture #team .acc__body p.fx-fixed{font-size:clamp(14px,1.15vw,var(--type-body))}
+/* C9: 하단 Join 이미지가 모니터마다 다르게 잘리지 않도록 비율 고정 */
+.approved-page #culture-end .art-next__visual,.approved-page .approved-contact .art-next__visual{aspect-ratio:692/750!important;align-self:start!important;min-height:0!important;height:auto!important;overflow:hidden;border-radius:10px}
+.approved-page #culture-end .art-next__visual img,.approved-page .approved-contact .art-next__visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%!important}
+.approved-page #culture-end .art-next__content,.approved-page .approved-contact .art-next__content{min-height:100%}
+/* C12: 모바일에서 Our Team 타이틀 노출 */
+@media(max-width:700px){
+ .approved-culture .approved-team-intro h2{display:block!important;font-size:28px;margin:0 0 14px}
+}
+
+/* ---------- 리크룻 ---------- */
+/* R3: 공고 목록과 Journey 섹션 사이 여백 */
+.approved-recruit .original-journey{margin-top:clamp(72px,8vw,128px)!important}
+/* R1: 여정 상세 — 줄 단위 블록 */
+.approved-recruit .journey-detail p.fx-fixed .fx-gap{height:1em}
+
+/* ---------- 메인: 제품 스테이지 스크롤 속도 (M2/MM1) ---------- */
+/* 카드가 펼쳐지는 구간이 너무 빨리 지나가서 스크롤 길이를 늘려 천천히 보이도록 (540svh → 680svh) */
+.approved-company .unicorn-mask-section:not(.is-previous-spread){height:680svh}
+@media(max-width:767px){.approved-company .unicorn-mask-section:not(.is-previous-spread){height:640svh}}
+@media(prefers-reduced-motion:reduce){.approved-company .unicorn-mask-section:not(.is-previous-spread){height:120svh}}
+
+/* ---------- 성과 카드: 페이지 내 인라인 <style>(html body …!important)보다 우선하도록 같은 수준으로 재선언 ---------- */
+html body.feedback-v2 .growth-tags-heading>p{font-size:clamp(14px,1.2vw,19px)!important;font-weight:600!important;letter-spacing:.02em!important;color:#111!important}
+html body.feedback-v2 .growth-cascade-card .cascade-number{top:7%!important}
+html body.feedback-v2 .growth-cascade-card .cascade-number .metric-unit{font-size:clamp(24px,2.6vw,40px)!important;font-weight:600!important;margin-top:clamp(10px,1.2vw,18px)!important}
+html body.feedback-v2 .growth-cascade-card .cascade-description{top:calc(7% + clamp(80px,10vw,152px) + clamp(18px,2.2vw,34px))!important;bottom:auto!important;width:40%!important;font-size:clamp(17px,1.65vw,27px)!important;font-weight:600!important}
+html body.feedback-v2 .growth-cascade-card .growth-sticker{font-size:clamp(13px,1.15vw,18px)!important;font-weight:600!important;max-width:30%!important}
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .cascade-number{top:12%!important}
+ html body.feedback-v2 .growth-cascade-card .cascade-number .metric-unit{font-size:20px!important;margin-top:8px!important}
+ html body.feedback-v2 .growth-cascade-card .cascade-description{top:calc(12% + clamp(62px,17vw,90px) + 16px)!important;width:60%!important;font-size:16px!important}
+ html body.feedback-v2 .growth-cascade-card .growth-sticker{font-size:11px!important;max-width:60%!important}
+}
+
+/* ---------- 모바일 헤더: 햄버거 → 전체 화면 메뉴 (전환 애니메이션 없음) ---------- */
+.approved-menu-toggle{display:none}
+@media(max-width:700px){
+ .approved-header{position:fixed;flex-wrap:nowrap}
+ .approved-header .approved-logo{position:relative;z-index:10002}
+ .approved-menu-toggle{display:inline-flex;align-items:center;justify-content:center;position:absolute;top:50%;right:16px;transform:translateY(-50%);z-index:10003;width:44px;height:44px;padding:0;border:0;border-radius:8px;background:#f1f1f1;color:#111;cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .approved-menu-toggle__bars{display:flex;flex-direction:column;gap:5px;width:20px}
+ .approved-menu-toggle__bars i{display:block;height:2px;border-radius:2px;background:currentColor}
+ .approved-menu-toggle__close{display:none;font-size:20px;line-height:1}
+ .approved-header.is-menu-open .approved-menu-toggle__bars{display:none}
+ .approved-header.is-menu-open .approved-menu-toggle__close{display:block}
+ .approved-header nav{display:none;position:fixed;inset:0;z-index:10000;flex-direction:column;gap:4px;margin:0;padding:112px 16px 28px;background:#fff;border-radius:0;overflow:auto}
+ .approved-header.is-menu-open nav{display:flex}
+ /* 기존 데스크톱 내비(회색 알약 컨테이너 + 흰 활성 알약 + 빨간 Recruit)와 같은 룩을 세로로 */
+ .approved-header.is-menu-open nav{background:#fff}
+ .approved-header.is-menu-open nav::before{content:"";position:absolute;left:16px;right:16px;top:112px;height:calc(4 * 52px + 3 * 4px + 12px);background:#efefef;border-radius:14px;z-index:-1}
+ .approved-header nav a{font:500 16px/1.2 Helvetica,Arial,sans-serif!important;padding:0 18px!important;min-height:52px;margin:0 6px;border-radius:10px;border:0!important;color:#111;background:transparent}
+ .approved-header nav a:first-child{margin-top:6px}
+ .approved-header nav a[aria-current]{background:#fff!important;color:#111!important}
+ .approved-header nav .approved-recruit{margin:0 6px 6px!important;justify-content:center;background:#e60012!important;color:#fff!important;border-radius:10px}
+ .approved-header,.approved-header *,.approved-header nav a{transition:none!important;animation:none!important}
+ html.approved-menu-open,html.approved-menu-open body{overflow:hidden!important}
+ /* 메인 페이지는 히어로에서 헤더가 숨겨지는데, 메뉴가 열려 있으면 항상 보이게 */
+ .approved-company .approved-header.is-menu-open{opacity:1!important;transform:none!important;visibility:visible!important}
+}
+
+/* ---------- 성과 카드 모바일: 1단 (텍스트 위, 그래픽 아래) ---------- */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card{height:auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;padding:26px 22px 22px!important;box-sizing:border-box}
+ html body.feedback-v2 .growth-cascade-card::after{display:none!important}
+ html body.feedback-v2 .growth-cascade-card .metric-copy{display:contents!important}
+ html body.feedback-v2 .growth-cascade-card :is(.growth-sticker,.cascade-number,.cascade-description,.metric-global h3){position:static!important;inset:auto!important;width:auto!important;max-width:none!important;margin:0!important;transform:none!important}
+ html body.feedback-v2 .growth-cascade-card .growth-sticker{order:0;margin-bottom:18px!important;font-size:12px!important;text-align:left!important}
+ html body.feedback-v2 .growth-cascade-card .cascade-number{order:1;font-size:clamp(64px,19vw,90px)!important;top:auto!important}
+ html body.feedback-v2 .growth-cascade-card .cascade-number .metric-unit{font-size:20px!important;margin-top:8px!important}
+ html body.feedback-v2 .growth-cascade-card .cascade-description{order:2;margin:14px 0 22px!important;font-size:17px!important;top:auto!important}
+ html body.feedback-v2 .growth-cascade-card .growth-ill{position:relative!important;order:3;inset:auto!important;width:100%!important;height:auto!important;aspect-ratio:1/1;border-radius:10px;overflow:hidden}
+ html body.feedback-v2 .growth-cascade-card .growth-ill .growth-art{top:50%;transform:translateY(-50%)}
+}
+
+/* C12: 모바일에서 Our Team 타이틀 노출 — 페이지 인라인 스타일이 h2를 sr-only로 숨기므로 모바일에서만 되살린다 */
+@media(max-width:700px){
+ html body.approved-culture #team .approved-team-intro>h2{position:static!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important;margin:0 0 14px!important;font-size:28px;line-height:1.15;color:#111}
+}
+/* 모바일: 글로벌 섹션 하단 여백은 작게 (데스크톱만 여백 추가) */
+@media(max-width:700px){.approved-company .global-cities-section{padding-bottom:16px!important}}
+
+/* ---------- 모바일: 유니콘 섹션 텍스트 크기·이미지-텍스트 간격 (MM2/MM3) ---------- */
+@media(max-width:767px){
+ html body.approved-company .unicorn-mask-stage{row-gap:22px!important}
+ html body.approved-company .unicorn-mask-english,html body.approved-company .unicorn-mask-english p{font-size:15px!important;line-height:1.55!important}
+ html body.approved-company .unicorn-stack-description,html body.approved-company .unicorn-stack-description p{font-size:15px!important;line-height:1.55!important}
+ html body.approved-company .unicorn-mask-title{font-size:clamp(30px,9vw,40px)!important}
+}
+
+/* ---------- 모바일 히어로: 텍스트 가운데 정렬, 구분선(작대기) 제거 ---------- */
+@media(max-width:700px){
+ html body.approved-company .company-film-hero .company-hero-copy{align-items:center!important;justify-content:center!important;text-align:center!important}
+ html body.approved-company .company-film-hero .company-hero-copy h1,html body.approved-company .company-film-hero .company-hero-copy p{text-align:center!important;width:100%!important;margin-inline:auto!important}
+ html body.approved-company .company-hero-copy .approved-hero-line{display:none!important}
+ html body.approved-company .company-hero-ko{text-align:center!important;left:0!important;right:0!important;width:100%!important;margin-inline:auto!important;padding-inline:24px!important}
+}
+/* 메뉴가 열려 있으면 헤더를 모든 고정 요소(히어로 영상 등) 위로 */
+@media(max-width:700px){html body .approved-header.is-menu-open{z-index:100000!important}}
+/* 모바일 히어로: 글자 조금 더 크게, 두 줄 간격 좁게 */
+@media(max-width:700px){
+ html body.approved-company .company-film-hero .company-hero-copy{gap:4px!important;row-gap:4px!important}
+ html body.approved-company .company-film-hero .company-hero-copy h1,html body.approved-company .company-film-hero .company-hero-copy p{font-size:clamp(27px,7.4vw,38px)!important;line-height:1.08!important;margin:0!important}
+ html body.approved-company .company-film-hero .company-hero-copy p{margin-top:2px!important}
+}
+/* 모바일 히어로: 'exist'가 다음 줄로 넘어가지 않도록 — 한 줄에 맞는 최대 크기 */
+@media(max-width:700px){
+ html body.approved-company .company-film-hero .company-hero-copy h1,html body.approved-company .company-film-hero .company-hero-copy p{font-size:clamp(22px,6.5vw,34px)!important;white-space:nowrap!important;letter-spacing:-.04em!important}
+}
+/* 메인 페이지 헤더는 transform/will-change 때문에 fixed 메뉴가 헤더 안에 갇힘 → 메뉴 열림 중엔 해제 */
+@media(max-width:700px){html body .approved-header.is-menu-open{will-change:auto!important;transform:none!important;filter:none!important}}
+
+/* 태블릿(701~1000px): 일하는 방식 카드가 우측 타이틀과 겹치던 문제 — 타이틀 위, 카드 아래로 쌓기 */
+@media(min-width:701px) and (max-width:1000px){
+ html body.approved-culture .cx-stage{position:relative!important;top:auto!important;height:auto!important;min-height:0!important;display:grid!important;gap:28px}
+ html body.approved-culture .cx-lay--b{position:relative!important;inset:auto!important;padding:0!important;opacity:1!important;visibility:visible!important;order:0;align-items:flex-start;text-align:left}
+ html body.approved-culture .cx-cards{position:relative!important;inset:auto!important;width:100%!important;transform:none!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;order:1}
+ html body.approved-culture .cx-actor,html body.approved-culture .cx-lay--a{display:none!important}
+ html body.approved-culture .cx-card{position:relative!important;transform:none!important;opacity:1!important;width:auto!important;min-width:0!important}
+ html body.approved-culture .cx-scroll{height:auto!important;min-height:0!important}
+}
+
+/* ======================================================================
+   UI/UX 폴리시 (토스 홈페이지 벤치마크: 넉넉한 여백·명확한 위계·일관된 버튼·부드러운 헤더·접근성)
+   — 색/서체/레이아웃 스타일은 그대로, 디테일만 다듬는다.
+   ====================================================================== */
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* 헤더: 반투명 + 블러 (스크롤 시 콘텐츠가 비쳐 보이는 토스식 헤더) */
+.approved-page .approved-header{background:rgba(255,255,255,.86)!important;-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid rgba(0,0,0,.06)!important}
+.approved-page .approved-header nav a{transition:background .15s ease,color .15s ease}
+.approved-page .approved-header nav a:hover{background:rgba(0,0,0,.05)}
+/* 버튼 공통: 12px 라운드, 48px 높이, 호버/포커스 상태 */
+.approved-page :is(.approved-join-button,.approved-mail,.pb-next__btn){border-radius:12px!important;min-height:48px!important;padding:14px 22px!important;font-weight:500!important;transition:transform .15s ease,background .15s ease,box-shadow .15s ease}
+.approved-page :is(.approved-join-button,.approved-mail,.pb-next__btn):hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.approved-page :is(.approved-join-button,.approved-mail,.pb-next__btn):active{transform:none;box-shadow:none}
+.approved-page .art-chip{border-radius:12px!important;min-height:40px;transition:background .15s ease,color .15s ease}
+.approved-page .art-chip:hover:not(.is-on){background:rgba(0,0,0,.06)}
+.approved-page .retail-carousel__btn{border-radius:12px!important}
+/* 키보드 포커스: 모든 인터랙티브 요소에 일관된 링 */
+.approved-page :is(a,button,[tabindex="0"]):focus-visible{outline:2px solid #e60012!important;outline-offset:3px!important;border-radius:8px}
+/* 아코디언(팀·FAQ·여정): 호버 피드백 + 충분한 터치 영역 */
+.approved-page .acc__head{min-height:56px;cursor:pointer;transition:background .15s ease}
+.approved-page .acc__head:hover{background:rgba(0,0,0,.025)!important}
+.approved-page .talent-toggle{cursor:pointer}
+/* 본문 가독성: 토스 본문 톤(16px/1.6, 보조 텍스트 회색) */
+.approved-culture :is(.talent-detail p,.cx-card__more p,#team .acc__body p),.approved-recruit :is(#faq .acc__body p,.journey-detail p){color:#3f434a;line-height:1.7}
+.approved-page figcaption span,.approved-page .job__meta{color:#727780}
+/* 컨택/Join 문장: 구 단위로만 줄바꿈 (한 글자 떨어짐 방지) */
+.nb{display:inline-block;white-space:nowrap}
+.approved-page .approved-contact h2{font-size:clamp(22px,2.1vw,34px)!important;line-height:1.35!important;text-wrap:balance}
+.approved-page #culture-end strong{font-size:clamp(24px,2.3vw,38px)!important;line-height:1.3!important}
+/* 컨택/Join 카드: 사진이 텍스트 카드 높이에 맞춰 늘어나되(잘림 없이 cover) 최소 비율은 유지 */
+.approved-page :is(#culture-end,.approved-contact) .art-next__visual{align-self:stretch!important}
+/* 푸터 간격 정돈 */
+.approved-page .approved-footer{padding-top:48px;padding-bottom:48px}
+/* 이미지 로딩 전 빈 영역이 튀지 않도록 */
+.approved-page img{background:#f0f0ee}
+.approved-page .approved-logo img,.approved-page .approved-olive-logo,.approved-page .growth-art img,.approved-page .growth-ill img,.approved-page .statement-sticker,.approved-page .product-face-front img{background:transparent}
+
+/* ---------- 모바일 타이포 위계 (≤700px): 한 단계씩 분명히 구분 ---------- */
+@media(max-width:700px){
+ .approved-page{--m-h1:32px;--m-h2:26px;--m-h3:20px;--m-body:16px;--m-small:13px}
+ html body.approved-page .art-hero h1{font-size:var(--m-h1)!important;line-height:1.2!important;letter-spacing:-.03em!important}
+ html body.approved-page :is(.approved-section-title,.talent-profile__heading h2,.approved-team-intro h2,#benefits>h2,.pb-next h2,.growth-tags-heading h2,.global-cities-intro h2,.vis-title){font-size:var(--m-h2)!important;line-height:1.25!important;letter-spacing:-.03em!important}
+ html body.approved-page :is(.cx-card__title,.talent-title,#team .acc__head>span:first-child,.journey-detail h3,.feedback-faq-subtitle,.job__title){font-size:var(--m-h3)!important;line-height:1.3!important}
+ html body.approved-page :is(.art-lead,.art-hero__intro,.cx-card__more p,.talent-detail p,#team .acc__body p,#faq .acc__body p,.journey-detail p,.pb-next__ko,.pb-ko,.job__desc,.cascade-description){font-size:var(--m-body)!important;line-height:1.65!important}
+ html body.approved-page :is(.talent-summary,.approved-team-copy,.job__meta,figcaption,.growth-sticker,.editorial-label,.growth-tags-heading>p,.mono){font-size:var(--m-small)!important;line-height:1.5!important}
+ html body.approved-page .approved-contact h2,html body.approved-page #culture-end strong{font-size:22px!important;line-height:1.35!important}
+ html body.approved-page .approved-mail{font-size:14px!important;padding:12px 16px!important}
+ .approved-page .acc__head{min-height:52px}
+ .approved-page :is(.talent-item,.acc__item){scroll-margin-top:96px}
+}
+
+/* ---------- UI/UX 2차 폴리시 ---------- */
+/* 컬처 히어로 소개문: 너무 작고 가늘던 문단을 본문 크기로 */
+.approved-culture .art-hero__intro{font-size:clamp(15px,1.1vw,18px)!important;line-height:1.65!important;color:#3f434a!important;font-weight:400!important}
+/* 공고 목록: 행 호버 피드백 + 외부 링크 화살표, 보조 정보 대비 */
+.approved-recruit .art-jobs .job{position:relative;transition:background .15s ease;border-radius:0}
+@media(hover:hover){.approved-recruit .art-jobs a.job:hover{background:rgba(0,0,0,.03)}
+.approved-recruit .art-jobs a.job:hover .job__title:after{content:' ↗';color:#e60012;font-weight:500}}
+.approved-recruit .art-jobs .job__meta span{color:#5d626b}
+/* 복지 항목: 설명문 대비 살짝 올림, 항목 간 구분선 톤 */
+.approved-culture #benefits .job__desc{color:#4a4f57}
+.approved-culture #benefits .job__desc.fx-fixed{max-width:none}
+/* 리테일 캐러셀: 사진 호버 시 살짝 확대, 캡션 또렷하게 */
+.approved-company .retail-collection__photos figure{overflow:hidden;border-radius:10px}
+.approved-company .retail-collection__photos figure img{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+.approved-company .retail-collection__photos figure:hover img{transform:scale(1.03)}
+/* 푸터 링크 호버 */
+.approved-footer a{transition:color .15s ease}.approved-footer a:hover{color:#e60012}
+/* 섹션 간 호흡: 메인 하단 CTA 위아래 */
+.approved-company .pb-next{margin-top:clamp(40px,5vw,80px)!important}
+/* 터치 기기에서 호버 변형 제거 */
+@media(hover:none){.approved-page :is(.approved-join-button,.approved-mail,.pb-next__btn):hover{transform:none;box-shadow:none}.approved-company .retail-collection__photos figure:hover img{transform:none}}
+
+/* 모바일 리테일 캡션: 두 줄이 잘리거나 흐려지지 않도록 — 그라데이션 키우고 줄바꿈 허용 */
+@media(max-width:700px){
+ html body .retail-collection__photos figure figcaption{opacity:1!important;transform:none!important;padding:48px 14px 14px!important;background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,0))!important}
+ html body .retail-collection__photos figcaption strong{font-size:15px!important;line-height:1.3!important;display:block;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+ html body .retail-collection__photos figcaption span{font-size:12px!important;line-height:1.4!important;display:block;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;opacity:.9!important;max-height:none!important}
+}
+/* 메뉴 열림: 헤더의 backdrop-filter가 fixed 메뉴의 기준 박스가 되어 메뉴가 헤더 높이에 갇히던 문제 → 열린 동안 해제 */
+@media(max-width:700px){
+ html body .approved-header.is-menu-open{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#fff!important}
+ html body .approved-header.is-menu-open nav{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:0!important;width:100vw!important;height:100dvh!important;min-height:100vh!important}
+}
+/* 모바일: 일하는 방식 두 번째 섹션("그리고 그 답을…")이 헤더 바로 밑에 붙어 보이지 않도록 위 여백 */
+@media(max-width:700px){
+ html body.approved-culture .cx-scroll--real{padding-top:40px!important}
+ html body.approved-culture .cx-scroll--real .cx-lay--b{padding-top:8px!important}
+ html body.approved-culture .cx-hint{margin-top:16px}
+}
+/* 모바일 메뉴: 배경 fill 없이 텍스트만 */
+@media(max-width:700px){
+ html body .approved-header.is-menu-open nav::before{display:none!important}
+ html body .approved-header.is-menu-open nav{padding:116px 20px 28px!important;gap:6px!important}
+ html body .approved-header.is-menu-open nav a{background:transparent!important;color:#111!important;font-size:22px!important;font-weight:500!important;padding:12px 0!important;margin:0!important;min-height:0;justify-content:flex-start!important;border-radius:0}
+ html body .approved-header.is-menu-open nav a[aria-current]{color:#e60012!important}
+ html body .approved-header.is-menu-open nav .approved-recruit{background:transparent!important;color:#e60012!important;margin-top:4px!important}
+}
+/* 모바일 메뉴 텍스트 굵게 */
+@media(max-width:700px){html body .approved-header.is-menu-open nav a{font-weight:700!important;letter-spacing:-.01em}}
+/* 모바일 성과 카드: 설명문과 그래픽 사이 간격 (앞선 :is() 규칙보다 우선) */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card[data-metric] .cascade-description{margin:14px 0 22px!important}
+ html body.feedback-v2 .growth-cascade-card[data-metric] .growth-sticker{margin:0 0 18px!important}
+}
+/* 모바일 마지막 CTA: 유니콘 마스코트를 현재의 60% 크기로, 우하단 정렬 */
+@media(max-width:700px){
+ html body .feedback-v2 .pb-next .feedback-mascot,html body.feedback-v2 .pb-next .feedback-mascot{transform:scale(.6)!important;transform-origin:100% 100%!important}
+}
+/* 모바일 CTA 마스코트: scale 대신 폭 60%로 축소(76%→46%), 잘림 없이 우하단에 보이도록 */
+@media(max-width:700px){
+ html body .feedback-v2 .pb-next .feedback-mascot,html body.feedback-v2 .pb-next .feedback-mascot{transform:none!important;width:46%!important;max-width:220px!important;bottom:-6%!important;right:-6%!important;top:auto!important}
+ html body.approved-company .pb-next{min-height:0!important;padding-bottom:150px!important}
+}
+/* 모바일 성과 카드 그래픽: 현재의 50% 크기 (폭 50%, 1:1 유지) */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill{width:50%!important;aspect-ratio:1/1;height:auto!important;align-self:flex-start}
+}
+/* 모바일 성과 카드 그래픽: 가로는 그대로(100%), 높이만 절반 (2:1) — 그림은 가운데 기준으로 잘림 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill{width:100%!important;aspect-ratio:2/1!important;height:auto!important}
+ html body.feedback-v2 .growth-cascade-card .growth-ill .growth-art{top:50%;transform:translateY(-50%)}
+}
+/* 모바일 성과 카드: 설명문은 디자인된 줄 단위로(1,400: 2줄), 그래픽은 2:1 박스 안에 잘리지 않게 맞춤 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .cascade-description .feedback-line{display:block!important}
+ html body.feedback-v2 .growth-cascade-card .cascade-description .feedback-line:after{content:none!important}
+ html body.feedback-v2 .growth-cascade-card .growth-ill .growth-art{width:auto!important;height:100%!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important}
+}
+/* 모바일 성과 카드 그래픽: 카드 안쪽 박스가 아니라 카드 폭과 같게 아래로 빼서(패딩 상쇄) 카드 하단에 붙임, 그림은 잘리지 않게 contain */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card{overflow:hidden!important}
+ html body.feedback-v2 .growth-cascade-card .growth-ill{width:calc(100% + 44px)!important;margin:0 -22px -22px!important;border-radius:0!important;aspect-ratio:2/1!important}
+}
+/* 모바일 성과 카드 그래픽: 가로로 꽉 차게(폭 100%, 위아래만 살짝 잘림), 박스는 4:3 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill{aspect-ratio:4/3!important}
+ html body.feedback-v2 .growth-cascade-card .growth-ill .growth-art{width:100%!important;height:auto!important;left:0!important;top:50%!important;transform:translateY(-50%)!important}
+ /* NO.1 카드: 올리브영 로고 키움 */
+ html body.feedback-v2 .growth-ill-rank .growth-art-layer img[src*="rank-7c66c"]{transform:scale(1.45) translateX(14%);transform-origin:center} /* 3차: OLIVE YOUNG 글자를 화살표에서 떨어지게 옆(오른쪽)으로 */
+}
+/* 모바일 1,400 카드: 상점 일러스트 확대 */
+@media(max-width:600px){html body.feedback-v2 .growth-ill-stores .growth-art{transform:translateY(-50%) scale(1.35)!important;transform-origin:50% 50%}}
+/* 모바일: 1,400 상점 확대는 살짝만(1.1), 28X 비행기·실선은 잘리지 않게 박스 안에 전부 들어가도록 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-ill-stores .growth-art{transform:translateY(-50%) scale(1.1)!important}
+ html body.feedback-v2 .growth-ill-global .growth-art{width:auto!important;height:100%!important;left:50%!important;transform:translate(-50%,-50%)!important}
+}
+/* 모바일 1,400: 확대 없이 박스 안에 맞춤(contain) — 바깥 빈 공간은 추가한 회색 상점이 채움 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-ill-stores .growth-art{width:auto!important;height:100%!important;left:50%!important;transform:translate(-50%,-50%)!important}
+}
+/* (우선순위 보정) 1,400·28X는 contain — 앞의 일반 규칙보다 구체적으로 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-stores .growth-art,
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-global .growth-art{width:auto!important;height:100%!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important}
+}
+/* NO.1도 잘리지 않게 contain (올리브영 로고 확대는 1.3으로) */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-rank .growth-art{width:auto!important;height:100%!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important}
+ html body.feedback-v2 .growth-ill-rank .growth-art-layer img[src*="rank-7c66c"]{transform:scale(1.3)}
+}
+/* 1,400 카드: 데스크톱은 기존 세로 구성, 모바일(≤600)은 4:3 와이드 구성(상점이 모두 안쪽에) */
+.growth-ill-stores .ill-stores-wide{display:none}
+@media(max-width:600px){
+ html body.feedback-v2 .growth-ill-stores .growth-art-layer:not(.ill-stores-wide){display:none!important}
+ html body.feedback-v2 .growth-ill-stores .ill-stores-wide{display:block!important}
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-stores .growth-art{width:100%!important;height:100%!important;left:0!important;top:0!important;transform:none!important;aspect-ratio:auto!important}
+}
+/* 28X: 모바일은 클리핑 없는 축소 버전(비행기·실선 전부 보임) */
+.growth-ill-global .ill-global-mobile{display:none}
+@media(max-width:600px){
+ html body.feedback-v2 .growth-ill-global .growth-art-layer:not(.ill-global-mobile){display:none!important}
+ html body.feedback-v2 .growth-ill-global .ill-global-mobile{display:block!important}
+ /* 1,300·300%: 너무 커서 0.72배로 */
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-sold .growth-art,
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-revenue .growth-art{width:auto!important;height:100%!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%) scale(.72)!important}
+}
+/* NO.1 모바일: 올리브영 로고 살짝 오른쪽으로 */
+@media(max-width:600px){html body.feedback-v2 .growth-ill-rank .growth-art-layer img[src*="rank-7c66c"]{transform:translateX(9%) scale(1.3)}}
+/* 28X 모바일: 그래픽이 박스 가로를 꽉 채워 실선이 끝까지 이어지게(cover), 비행기는 0.8배 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-global .growth-art{width:100%!important;height:auto!important;left:0!important;top:50%!important;transform:translateY(-50%)!important}
+}
+/* 1,300·300% 모바일: 0.72 → 0.95배 (너무 작다는 피드백) */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-sold .growth-art,
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-revenue .growth-art{transform:translate(-50%,-50%) scale(.95)!important}
+}
+/* 1,300·300% 모바일: 가로 꽉 채우기(cover), 그림이 있는 아래쪽 띠(24~94%)가 보이도록 위로 당김 */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-sold .growth-art,
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-revenue .growth-art{width:100%!important;height:auto!important;left:0!important;top:0!important;transform:translateY(-23%)!important}
+}
+/* 1,300·300% 모바일: 그림 중심이 박스 중앙에 오도록 0.7배 (아트 1093:1382, translateY -23% 기준으로 원점 역산) */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-sold .growth-art{transform:translateY(-23%) scale(.7)!important;transform-origin:50% 47%}
+ html body.feedback-v2 .growth-cascade-card .growth-ill.growth-ill-revenue .growth-art{transform:translateY(-23%) scale(.7)!important;transform-origin:50% 33%}
+}
+/* ===== 3차 모바일 추가 피드백 (10/30) ===== */
+.v3-mb-br{display:none}
+@media(max-width:700px){
+ html body.approved-page .growth-cascade .growth-tags-heading p br.v3-mb-br{display:inline!important}
+ /* WHAT IS A UNICORN / WE CALL THEM UNICORN PRODUCTS: 타이틀 위, 설명 아래, 모두 중앙 정렬. 카드는 그 아래 */
+ html body.approved-company .unicorn-mask-stage{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;row-gap:14px!important;align-content:center!important;column-gap:0!important}
+ html body.approved-company .unicorn-mask-title,html body.approved-company .unicorn-stack-title{grid-column:1!important;grid-row:1!important;text-align:center!important;justify-self:center!important;align-self:end!important;width:100%!important}
+ html body.approved-company .unicorn-mask-english,html body.approved-company .unicorn-stack-detail{grid-column:1!important;grid-row:3!important;text-align:center!important;justify-self:center!important;align-self:start!important;width:100%!important;justify-items:center}
+ html body.approved-company .unicorn-mask-frame{grid-row:2!important}
+ html body.approved-company .unicorn-stack-title>span{display:block;text-align:center!important}
+ html body.approved-company .unicorn-stack-description,html body.approved-company .unicorn-stack-description h3,html body.approved-company .unicorn-stack-description p{text-align:center!important}
+ html body.approved-company .unicorn-mask-english .unicorn-english-line{justify-content:center!important;text-align:center!important}
+ /* 성장 카드: 데스크톱 캐스케이드용 top 오프셋 제거 → 제목 아래 흰 간격·다음 섹션 침범 해소 */
+ html body.feedback-v2 .growth-cascade-stack .growth-cascade-card,html body.feedback-v2 .growth-cascade-stack .growth-cascade-card:not(:first-child){top:0!important}
+ html body.feedback-v2 .growth-cascade>.growth-tags-heading{position:relative!important;top:0!important}
+ /* ONE OF THE WORLD'S MOST LOVED WELLNESS BRANDS: 박스 안에 들어가도록 축소 */
+ html body.approved-page .global-cities-message h3{font-size:clamp(17px,5.4vw,22px)!important;line-height:1.18!important}
+ html body.approved-page .global-cities-message{align-content:center!important;padding:24px!important}
+ /* CTA 카드(We Don't Follow Categories): 80% */
+ html body.approved-company .pb-next{padding:29px 20px 120px!important;gap:16px!important}
+ html body.approved-page .pb-next h2{font-size:calc(var(--m-h2) * .8)!important}
+ html body.approved-page .pb-next__ko{font-size:calc(var(--m-body) * .8)!important}
+ html body.approved-page .pb-next__btn{min-height:40px!important;padding:11px 18px!important;font-size:14px!important}
+ html body .feedback-v2 .pb-next .feedback-mascot,html body.feedback-v2 .pb-next .feedback-mascot{width:37%!important;max-width:176px!important}
+ /* 컬처·채용 CTA도 같은 80% 스케일로 통일 */
+ html body.approved-page .approved-contact h2,html body.approved-page #culture-end strong{font-size:18px!important}
+ html body.approved-page :is(.approved-join-button,.approved-mail){min-height:40px!important;padding:11px 18px!important;font-size:14px!important}
+ /* 컬처: 스크롤 힌트 문구가 고정 타이틀(HOW WE WORK)과 겹침 → 모바일에서 숨김 */
+ html body.approved-culture .cx-hint{display:none!important}
+}
+/* 글로벌 영상 카드 ↔ CTA 카드 간격 통일 (데스크톱 40px / 모바일 28px) */
+html body.approved-company .global-cities-section{padding-bottom:40px!important}
+html body.approved-company .pb-next{margin-top:0!important}
+@media(max-width:700px){
+ html body.approved-company .global-cities-section{padding-bottom:28px!important}
+}
+/* 글로벌 확대 영상(모바일): 스테이지 높이를 채우므로 영상은 cover로 */
+@media(max-width:700px){
+ html body.approved-company .city-expanded-film>video{width:100%!important;height:100%!important;object-fit:cover!important}
+}
+/* 컬처(모바일): 고정 시트가 헤더 아래 간격을 두고 스티키 되도록 — 시트 위로 끌어올리는 음수 마진 제거, 스테이지 top=헤더 높이 */
+@media(max-width:700px){
+ html body.approved-culture .cx-scroll{margin-top:0!important}
+ html body.approved-culture .cx-stage{top:88px!important;height:calc(100svh - 88px)!important}
+ html body.approved-culture .cx-lay{padding-top:36px!important}
+}
+/* 컬처(≤1000px): 흰 시트가 히어로 위로 라운딩된 채 올라오지 않도록 — 평평한 흰 면으로 */
+@media(max-width:1000px){
+ html body.approved-culture .art-plain{border-radius:0!important;margin-top:0!important}
+ html body.approved-culture .art-hero{margin-bottom:0!important}
+}
+/* 컬처(모바일): HOW WE WORK 블록 줄 간격 2배 */
+@media(max-width:700px){
+ html body.approved-culture .cx-intro__q{margin-bottom:16px!important}
+ html body.approved-culture .cx-intro__sub{margin-top:16px!important}
+ html body.approved-culture .cx-screen__label{margin-bottom:12px!important}
+ html body.approved-culture .cx-screen__ko{margin-top:16px!important}
+}
+/* 컬처(모바일): 첫 상태(HOW WE WORK 블록)는 고정 시트 세로 중앙에 */
+@media(max-width:700px){
+ html body.approved-culture .cx-lay--a{display:flex!important;flex-direction:column!important;justify-content:center!important;padding-top:0!important;padding-bottom:40px!important}
+}
+/* 컬처(모바일): AND WE MAKE IT REAL 스테이지도 헤더 아래 36px 간격 (데스크톱용 8px 규칙보다 우선) */
+@media(max-width:700px){
+ html body.approved-culture .cx-scroll--real .cx-stage .cx-lay--b{padding-top:36px!important}
+}
+/* 컬처(모바일): 팀 아코디언 항목 간격 절반 (28px → 14px) */
+@media(max-width:700px){
+ html body.approved-culture #team .acc__head{padding:14px 0!important}
+}
+/* ---------- 모바일 타이포 스케일 정리 (≤700px) — Apple HIG·토스 기준: 12 캡션 / 13 보조 / 14 서브 / 16 본문 / 20 소제목 / 22 중제목 / 26 섹션 / 28~32 디스플레이 ---------- */
+@media(max-width:700px){
+ html{-webkit-text-size-adjust:100%}
+ /* 메인 히어로: 한글 부제 16px (영문 제목은 한 줄 유지를 위해 기존 크기) */
+ html body.approved-company .company-hero-ko{font-size:16px!important;line-height:1.5!important}
+ /* 유니콘 섹션: 디스플레이 타이틀 30px, 영문 설명 15px, 라벨 12px */
+ html body.approved-company .unicorn-mask-title{font-size:30px!important;line-height:1.05!important;letter-spacing:-.03em!important}
+ html body.approved-page .unicorn-mask-english .unicorn-english-line>span{font-size:15px!important;line-height:1.5!important}
+ html body.approved-page .unicorn-mask-stage .unicorn-stack-title>span:first-child{font-size:12px!important;letter-spacing:.06em!important;text-transform:uppercase}
+ html body.approved-page .unicorn-stack-description h3{font-size:22px!important;line-height:1.2!important;letter-spacing:-.02em!important}
+ html body.approved-page .unicorn-stack-description p,html body.approved-page .unicorn-stack-description .feedback-line{font-size:14px!important;line-height:1.5!important}
+ html body.approved-company .approved-flow-caption{font-size:14px!important}
+ html body.approved-company .reimagine-question{font-size:20px!important}
+ /* 중제목 22px: 리테일 섹션 헤더, 채용 여정 단계 */
+ html body.approved-page.approved-company .retail-gallery .retail-collection .retail-collection__header h2{font-size:22px!important;line-height:1.25!important;letter-spacing:-.02em!important}
+ html body.approved-recruit .journey-choice{font-size:20px!important}
+ /* 컬처: 디스플레이 32px, 카드 보조문 15px, 인재상 요약 14px */
+ html body.approved-culture .cx-intro__title,html body.approved-culture .cx-screen__title{font-size:32px!important;line-height:1.1!important;letter-spacing:-.025em!important}
+ html body.approved-culture .cx-intro__q{line-height:1.4!important}
+ html body.approved-culture .cx-card__sub{font-size:15px!important;line-height:1.5!important}
+ html body.approved-culture .talent-summary{font-size:14px!important;line-height:1.5!important}
+ html body.approved-culture #benefits>h2,html body.approved-culture #benefits>h2 *{font-size:var(--m-h2)!important;line-height:1.25!important;letter-spacing:-.03em!important}
+ /* 터치 타겟: 필터 칩 최소 40px */
+ html body.approved-recruit .art-chip{min-height:40px!important;padding-inline:14px!important}
+}
+/* WE DON'T ASK / HOW IS IT DONE? (모바일): 크게 — 두 칸을 내용 너비로 잡고 가운데 모음 */
+@media(max-width:700px){
+ html body.approved-company .reimagine-flow-stage .reimagine-question{font-size:30px!important;grid-template-columns:max-content max-content!important;column-gap:14px!important;justify-content:center!important;line-height:1.08!important}
+}
+/* 컬처(모바일): 라벨/질문 → 제목 12px, 제목 → 설명 16px 로 두 블록 통일 */
+@media(max-width:700px){
+ html body.approved-culture .cx-intro__q,html body.approved-culture .cx-screen__label,html body.approved-culture .cx-real__q{margin-bottom:12px!important}
+ html body.approved-culture .cx-intro__title,html body.approved-culture .cx-screen__title{margin:0!important}
+ html body.approved-culture .cx-intro__sub,html body.approved-culture .cx-screen__ko{margin-top:16px!important}
+}
+/* 컬처(모바일): 팀 아코디언 행 더 촘촘하게 (행 패딩 10px, 제목-설명 4px, 항목 간 0) */
+@media(max-width:700px){
+ html body.approved-culture #team .acc__head{padding:10px 0!important;row-gap:4px!important}
+ html body.approved-culture #team .art-acc{gap:0!important}
+ html body.approved-culture #team .acc__head>span:first-child{line-height:1.2!important}
+}
+/* 컬처 JOIN US · 채용 Contact 사진(모바일): 4:3으로 낮게 */
+@media(max-width:700px){
+ html body.approved-page #culture-end .art-next__visual,html body.approved-page .approved-contact .art-next__visual{aspect-ratio:4/3!important}
+ html body.approved-page #culture-end .art-next__visual img,html body.approved-page .approved-contact .art-next__visual img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 30%}
+}
+/* 컬처 인재상 리스트(모바일): 팀 아코디언과 같은 스타일 — 구분선·열림 배경 제거, 촘촘한 행 */
+@media(max-width:700px){
+ html body.approved-culture .talent-list{border-top:0!important;border-bottom:0!important}
+ html body.approved-culture .talent-item,html body.approved-culture .talent-item.is-open,html body.approved-culture .talent-item:has([aria-expanded="true"]){border:0!important;background:transparent!important;border-radius:0!important}
+ html body.approved-culture .talent-toggle{padding:10px 0!important}
+ html body.approved-culture .talent-label{gap:4px!important;row-gap:4px!important}
+ html body.approved-culture .talent-detail>*{padding-left:0!important}
+}
+/* 컬처 JOIN US 사진(모바일): 인물·스티커 쪽으로 1.3배 확대 */
+@media(max-width:700px){
+ html body.approved-page #culture-end .art-next__visual{overflow:hidden!important}
+ html body.approved-page #culture-end .art-next__visual img{transform:none!important;object-position:50% 40%!important} /* 3차: 새 사진은 확대 없이 그대로 */
+}
+/* 채용 입사축하금 띠(모바일): 시트 상단과 같은 라운딩 — 위쪽 모서리만 */
+@media(max-width:700px){
+ html body.approved-recruit .art-bonus{border-radius:10px 10px 0 0!important;overflow:hidden!important}
+ html body.approved-recruit .art-bonus__head{border-radius:10px 10px 0 0!important}
+}
+/* ---------- 채용 Journey(모바일): 세로 스텝퍼 + 선택한 단계 바로 아래 인라인 펼침 ---------- */
+@media(max-width:700px){
+ html body.approved-recruit .journey-orbit{padding:8px 20px 12px!important}
+ html body.approved-recruit .process-track{display:flex!important;flex-direction:column!important;gap:0!important;padding:12px 0 8px!important;position:relative!important}
+ html body.approved-recruit .process-track::before{content:'';position:absolute;left:15px;top:36px;bottom:40px;width:1px;background:rgba(255,255,255,.16)}
+ html body.approved-recruit .process-track>*{order:0!important}
+ /* 단계 행 */
+ html body.approved-recruit .journey-choice{position:relative!important;z-index:1;display:flex!important;align-items:center!important;gap:14px!important;padding:12px 0!important;margin:0!important;font-size:17px!important;font-weight:600!important;letter-spacing:-.02em!important;color:#fff!important;opacity:1!important;background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;text-align:left!important;width:100%!important;transform:none!important;min-height:52px}
+ html body.approved-recruit .journey-choice:not(.is-active){color:rgba(255,255,255,.55)!important}
+ html body.approved-recruit .journey-choice:focus-visible{outline:2px solid rgba(255,255,255,.5)!important;outline-offset:2px!important;border-radius:6px}
+ html body.approved-recruit .journey-choice>span{flex:none;display:grid!important;place-items:center;width:31px!important;height:31px!important;border-radius:50%!important;border:1px solid rgba(255,255,255,.35)!important;background:#111!important;font-size:12px!important;font-weight:600!important;letter-spacing:0!important;color:rgba(255,255,255,.7)!important;margin:0!important;line-height:1!important}
+ html body.approved-recruit .journey-choice.is-active>span{background:#e60012!important;border-color:#e60012!important;color:#fff!important}
+ /* 단계 상세: 배지 오른쪽 열에 맞춰 들여쓰기, 제목은 버튼과 중복이라 숨김 */
+ html body.approved-recruit .journey-detail{position:relative!important;z-index:1;margin:0 0 6px 45px!important;padding:2px 0 14px!important;width:auto!important;max-width:none!important;background:transparent!important;border:0!important;transform:none!important;opacity:1!important}
+ html body.approved-recruit .journey-detail>h3{display:none!important}
+ html body.approved-recruit .journey-detail p{font-size:15px!important;line-height:1.65!important;color:rgba(255,255,255,.78)!important;margin:0 0 10px!important}
+ html body.approved-recruit .journey-detail p:last-child{margin-bottom:0!important}
+ html body.approved-recruit .journey-detail .fx-line{white-space:normal!important;display:inline!important}
+}
+/* 컬처 인재상(모바일): 펼친 항목은 일하는 방식 카드와 같은 회색 카드로 채움 */
+@media(max-width:700px){
+ html body.approved-culture .talent-item{padding:0 14px!important;border-radius:10px!important;transition:background .2s ease}
+ html body.approved-culture .talent-item:has(.talent-toggle[aria-expanded="true"]){background:#f1f1f1!important;padding:4px 14px 16px!important;margin:6px 0!important}
+ html body.approved-culture .talent-item:has(.talent-toggle[aria-expanded="true"]) .talent-detail>*{padding-right:0!important}
+}
+/* 채용 Journey(모바일): 스텝퍼 아래 빈 공간 제거 (데스크톱 스티키용 고정 높이 해제) */
+@media(max-width:700px){
+ html body.approved-recruit .journey-sticky,html body.approved-recruit .journey-orbit,html body.approved-recruit .journey-frame{height:auto!important;min-height:0!important;position:relative!important;top:auto!important}
+ html body.approved-recruit .process-track::before{bottom:34px}
+}
+/* 채용 입사축하금 띠(모바일): 화면 양끝까지 풀블리드 */
+@media(max-width:700px){
+ html body.approved-recruit .art-bonus{margin-inline:-16px!important;width:calc(100% + 32px)!important;max-width:none!important}
+ html body.approved-recruit .art-bonus__head{padding-inline:20px!important}
+}
+/* 컬처·채용 히어로 소개문(모바일): 중앙 정렬 */
+@media(max-width:700px){
+ html body.approved-page .art-hero__intro{text-align:center!important;margin-inline:auto!important;text-wrap:balance}
+}
+/* 컬처·채용 히어로(모바일): 제목+사진+소개문(+입사축하금 띠)이 한 화면(100svh)에 들어오도록 사진 높이 조절 */
+@media(max-width:700px){
+ html body.approved-page .art-hero__photo{aspect-ratio:auto!important;overflow:hidden;border-radius:10px}
+ html body.approved-page .art-hero__photo img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 40%}
+ html body.approved-recruit .art-hero__photo{height:clamp(220px,calc(100svh - 456px),460px)!important}
+ html body.approved-culture .art-hero__photo{height:clamp(200px,calc(100svh - 470px),460px)!important}
+}
+/* 컬처(모바일): HOW WE WORK 블록 행간 약간 축소 (라벨→제목 8px, 제목→설명 12px, 두 상태 동일) */
+@media(max-width:700px){
+ html body.approved-culture .cx-intro__q,html body.approved-culture .cx-screen__label,html body.approved-culture .cx-real__q{margin-bottom:8px!important}
+ html body.approved-culture .cx-intro__sub,html body.approved-culture .cx-screen__ko{margin-top:12px!important}
+}
+/* 컬처 데스크톱: 카드가 고정 줄바꿈 문장 때문에 카드 열(.cx-cards)보다 넓어져 텍스트를 덮던 문제 — 카드는 항상 열 폭에 맞추고, 긴 줄은 fx-scale로 축소 */
+html body.approved-culture .cx-cards>.cx-card{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+html body.approved-culture .cx-card .cx-card__more,html body.approved-culture .cx-card .cx-card__more>div,html body.approved-culture .cx-card .cx-fixed{min-width:0!important;max-width:100%!important;overflow:hidden}
+/* 컬처 일하는 방식 카드: 펼친 본문을 서브 텍스트와 같은 14px로, 축소 없이 줄바꿈(고정 줄 단위 블록은 유지) */
+html body.approved-culture .cx-card__more p.cx-fixed{font-size:17px!important;line-height:1.7!important}
+html body.approved-culture .cx-card__more .fx-line{white-space:normal!important}
+/* 컬처 인재상(전 폭): 모바일과 같은 스타일 — 구분선 없이, 펼친 항목만 회색 라운드 카드 */
+html body.approved-culture .talent-list{border-top:0!important;border-bottom:0!important}
+html body.approved-culture .talent-item{border:0!important;background:transparent!important;border-radius:10px!important;padding:0 16px!important;transition:background .2s ease}
+html body.approved-culture .talent-item:has(.talent-toggle[aria-expanded="true"]){background:#f1f1f1!important;padding:6px 16px 20px!important;margin:8px 0!important}
+html body.approved-culture .talent-toggle{padding:18px 0!important}
+/* 채용 입사축하금 띠: 문구+화살표 가운데 정렬 */
+html body.approved-recruit .art-bonus__head{display:flex!important;justify-content:center!important;align-items:center!important;gap:12px!important;text-align:center!important;width:100%!important}
+/* 컬처 데스크톱(>1000px): 텍스트 열을 왼쪽, 카드 열을 오른쪽으로 교체 */
+@media(min-width:1001px){
+ html body.approved-culture .cx-lay--a,html body.approved-culture .cx-lay--b{padding-left:0!important;padding-right:40%!important}
+ html body.approved-culture .cx-cards{left:auto!important;right:0!important}
+}
+/* 성과 카드 서브 텍스트: 숫자 아래로 살짝 더 (데스크톱 +8px, 모바일 14→22px) */
+html body.feedback-v2 .growth-cascade-card .cascade-description{margin-top:8px!important}
+@media(max-width:700px){html body.feedback-v2 .growth-cascade-card .cascade-description{margin-top:22px!important}}
+/* 컬처 데스크톱(>1000px): HOW WE WORK 첫 상태 글자 살짝 축소·좌측 정렬, 인재상 리스트를 다른 2단 섹션(Our Team·Benefits)의 우측 열 선에 맞춤 */
+@media(min-width:1001px){
+ html body.approved-culture .cx-lay--a{align-items:flex-start!important;text-align:left!important}
+ html body.approved-culture .cx-intro__title{font-size:66px!important}
+ html body.approved-culture .cx-intro__sub{font-size:24px!important}
+ html body.approved-culture .cx-intro__q{font-size:18px!important}
+ html body.approved-culture .talent-profile{grid-template-columns:minmax(0,34.26%) minmax(0,1fr)!important;column-gap:0!important}
+ html body.approved-culture .talent-list{width:100%!important;max-width:none!important}
+ html body.approved-culture .talent-item{margin:0 -16px!important;padding:0 16px!important}
+ html body.approved-culture .talent-item:has(.talent-toggle[aria-expanded="true"]){margin:8px -16px!important}
+}
+/* 컬처 데스크톱: 카드 열을 아래 2단 섹션의 우측 열 선(34.26%)부터 끝까지 늘리고, 텍스트는 왼쪽 열(34%) 안에 맞춤 */
+@media(min-width:1001px){
+ html body.approved-culture .cx-cards{width:calc(100% - 34.26%)!important}
+ html body.approved-culture .cx-lay--a,html body.approved-culture .cx-lay--b{padding-right:calc(100% - 34.26% + 24px)!important}
+ html body.approved-culture .cx-screen__title{font-size:min(4.1vw,78px)!important}
+ html body.approved-culture .cx-intro__title{font-size:min(4.1vw,66px)!important} /* 액터(.cx-actor)는 JS가 초기 크기를 캐시하므로 건드리지 않음 */
+}
+/* 컬처 데스크톱: 텍스트 열 ↔ 카드 열 간격 확대 (제목을 열 폭에 맞게 조금 더 축소) */
+@media(min-width:1001px){
+ html body.approved-culture .cx-lay--a,html body.approved-culture .cx-lay--b{padding-right:calc(100% - 34.26% + 72px)!important}
+ html body.approved-culture .cx-screen__title{font-size:min(3.6vw,70px)!important}
+ html body.approved-culture .cx-intro__title{font-size:min(3.8vw,62px)!important}
+}
+/* 컬처: 한글 설명/질문 줄이 두 줄로 접힐 때 행간 1.5 */
+html body.approved-culture .cx-screen__ko,html body.approved-culture .cx-intro__q,html body.approved-culture .cx-real__q{line-height:1.5!important}
+/* 컬처 데스크톱 타이포 체계 (토스식 위계): 라벨 18/1.4 → 디스플레이 ~52px/1.05/-.03em → 본문 18/1.55, 간격 라벨→제목 12px · 제목→본문 20px */
+@media(min-width:1001px){
+ /* 첫 상태 */
+ html body.approved-culture .cx-intro__q{font-size:18px!important;line-height:1.5!important;letter-spacing:-.01em!important;margin:0 0 14px!important;white-space:normal!important;max-width:100%}
+ html body.approved-culture .cx-intro__title{font-size:min(3.6vw,60px)!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0!important}
+ html body.approved-culture .cx-intro__sub{font-size:min(22px,1.5vw)!important;line-height:1.3!important;letter-spacing:-.02em!important;margin:16px 0 0!important;white-space:nowrap!important} /* 액터 슬롯이 줄바꿈되면 모핑 좌표가 꼬이므로 한 줄 고정 */
+ /* 두 번째 상태 */
+ html body.approved-culture .cx-screen__label{font-size:18px!important;line-height:1.4!important;letter-spacing:-.01em!important;margin:0 0 12px!important}
+ html body.approved-culture .cx-screen__title{font-size:min(3.6vw,60px)!important;line-height:1.05!important;letter-spacing:-.03em!important;margin:0!important}
+ html body.approved-culture .cx-screen__ko,html body.approved-culture .cx-real__q{font-size:18px!important;line-height:1.55!important;letter-spacing:-.01em!important}
+ html body.approved-culture .cx-screen__ko{margin:20px 0 0!important}
+ html body.approved-culture .cx-real__q{margin:0 0 12px!important}
+}
+/* 컬처 데스크톱 첫 상태: 한글 질문을 제목·서브 아래로 (두 번째 상태와 같은 순서) */
+@media(min-width:1001px){
+ html body.approved-culture .cx-lay--a{display:flex!important;flex-direction:column!important}
+ html body.approved-culture .cx-intro__q{order:3;margin:20px 0 0!important}
+}
+/* 컬처 데스크톱 첫 상태 위계 정리: 디스플레이(검정·60) > 서브(세미볼드·20) > 한글(회색·17), 간격 12 / 28 */
+@media(min-width:1001px){
+ html body.approved-culture .cx-intro__title{line-height:1!important}
+ html body.approved-culture .cx-intro__sub{font-size:20px!important;font-weight:600!important;letter-spacing:-.01em!important;margin-top:12px!important;color:#111!important}
+ html body.approved-culture .cx-intro__q{font-size:17px!important;line-height:1.6!important;font-weight:400!important;color:#6b6f76!important;margin-top:28px!important}
+ /* 두 번째 상태도 같은 톤: 라벨 세미볼드, 한글 회색 */
+ html body.approved-culture .cx-screen__label{font-weight:600!important;color:#111!important}
+ html body.approved-culture .cx-screen__ko{font-size:17px!important;line-height:1.6!important;color:#6b6f76!important;margin-top:24px!important}
+ html body.approved-culture .cx-real__q{font-size:17px!important;color:#6b6f76!important}
+}
+/* 컬처 데스크톱 타이포 재정리 — 원칙: 디스플레이 1개만 굵게, 보조 줄은 '굵기'가 아니라 '자간·크기·색'으로 구분, 보조 그룹은 가깝게·제목과는 멀게(근접성) */
+@media(min-width:1001px){
+ /* 첫 상태 */
+ html body.approved-culture .cx-intro__title{font-size:min(3.9vw,64px)!important;font-weight:700!important;line-height:.98!important;letter-spacing:-.035em!important}
+ html body.approved-culture .cx-intro__sub{font-size:18px!important;font-weight:500!important;letter-spacing:.06em!important;line-height:1.4!important;color:#111!important;margin-top:22px!important}
+ html body.approved-culture .cx-intro__q{font-size:17px!important;font-weight:400!important;line-height:1.6!important;letter-spacing:-.01em!important;color:#5c6168!important;margin-top:10px!important;max-width:30ch}
+ /* 두 번째 상태: 라벨은 작은 스페이스드 캡스, 제목 하나만 굵게, 한글은 회색 본문 */
+ html body.approved-culture .cx-screen__label{font-size:14px!important;font-weight:500!important;letter-spacing:.08em!important;line-height:1.4!important;color:#6b6f76!important;margin:0 0 14px!important}
+ html body.approved-culture .cx-screen__title{font-size:min(3.6vw,60px)!important;line-height:1!important;letter-spacing:-.035em!important}
+ html body.approved-culture .cx-screen__ko{font-size:17px!important;line-height:1.6!important;color:#5c6168!important;margin-top:20px!important;max-width:34ch}
+ html body.approved-culture .cx-real__q{font-size:14px!important;font-weight:500!important;letter-spacing:.02em!important;color:#6b6f76!important;margin:0 0 14px!important}
+}
+/* 첫 상태 서브 줄은 '액터(굵은 디스플레이체)'가 슬롯 폭에 맞춰 보이는 구조 → 자간을 주면 오히려 커지므로 자간 0·15px의 작은 볼드 캡스(킥커)로 */
+@media(min-width:1001px){
+ html body.approved-culture .cx-intro__sub{font-size:15px!important;letter-spacing:0!important;margin-top:24px!important}
+ html body.approved-culture .cx-intro__q{margin-top:12px!important}
+}
+/* 컬처: 스크롤 안내 문구(.cx-hint) 전 폭 삭제 */
+html body.approved-culture .cx-hint{display:none!important}
+/* 컬처 인트로: 한글 줄은 위아래로 튀지 않고 제자리에서 크로스페이드 (첫 상태 질문 ↔ 두 번째 상태 설명) */
+html body.approved-culture .cx-fade-a,html body.approved-culture .cx-fade-b{transform:none!important;transition:opacity .25s linear}
+/* 컬처(전 폭): 흰 시트가 히어로 위로 라운딩된 채 올라오는 효과 제거 — 평평하게 이어붙임 */
+html body.approved-culture .art-plain{border-radius:0!important;margin-top:0!important}
+html body.approved-culture .art-hero{margin-bottom:0!important}
+html body.approved-culture .cx-scroll{margin-top:0!important}
+/* 컬처 첫 상태: 줄 간격 축소 (제목→서브 16px, 서브→한글 8px) */
+@media(min-width:1001px){
+ html body.approved-culture .cx-intro__sub{margin-top:16px!important}
+ html body.approved-culture .cx-intro__q{margin-top:8px!important}
+}
+/* 컬처 데스크톱: 한글 보조문 크기 통일(17px) + 첫 상태 서브 줄 단어 간격 확보 */
+@media(min-width:1001px){
+ html body.approved-culture .cx-real__q{font-size:17px!important;font-weight:400!important;letter-spacing:-.01em!important;line-height:1.6!important;color:#5c6168!important;margin:0 0 12px!important}
+ html body.approved-culture .cx-intro__sub{word-spacing:.1em!important}
+}
+/* 컬처 첫 상태: 줄 간격 더 축소 (제목→서브 10px, 서브→한글 4px) */
+@media(min-width:1001px){
+ html body.approved-culture .cx-intro__sub{margin-top:10px!important}
+ html body.approved-culture .cx-intro__q{margin-top:4px!important}
+}
+/* 컬처 첫 상태: 한글 질문을 다시 제목 위로 (질문 → 제목 → 서브) */
+@media(min-width:1001px){
+ html body.approved-culture .cx-intro__q{order:0!important;margin:0 0 10px!important}
+ html body.approved-culture .cx-intro__title{order:1}
+ html body.approved-culture .cx-intro__sub{order:2;margin-top:10px!important}
+}
+/* 컬처 첫 상태 리듬 최종: 4px 그리드 — 질문→제목 12px, 제목→서브 12px / 제목 자간 -.035em·행간 .98 / 서브 15px 캡스 자간 .01em */
+@media(min-width:1001px){
+ html body.approved-culture .cx-intro__q{margin:0 0 12px!important}
+ html body.approved-culture .cx-intro__sub{margin-top:12px!important;letter-spacing:.01em!important}
+}
+/* 컬처 인재상 상세(데스크톱): 위 카드 본문과 같은 스타일 — 제목선에 맞춰 정렬, 문장은 자연스럽게 이어 쓰기, 15px/1.7 */
+@media(min-width:1001px){
+ html body.approved-culture .talent-detail p{padding:0 calc(66px + 24px + 2*clamp(12px,1.6vw,24px)) 24px calc(24px + clamp(12px,1.6vw,24px))!important;font-size:15px!important;line-height:1.7!important;letter-spacing:-.01em!important;color:#4a4f57!important;max-width:none!important}
+ html body.approved-culture .talent-detail p .fx-line{display:inline!important;white-space:normal!important}
+ html body.approved-culture .talent-detail p .fx-line:not(:last-child):after{content:' '}
+ html body.approved-culture .talent-summary{font-size:14px!important;color:#6b6f76!important}
+}
+/* 복지 분류 칩(컬처 Benefits): 스크롤 시 헤더 아래에 스티키 */
+html body.approved-culture #benefits .art-chips{position:sticky;top:88px;z-index:20;background:#fff;padding:12px 0 12px;margin-top:-12px;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+html body.approved-culture #benefits{position:relative}
+@media(max-width:700px){html body.approved-culture #benefits .art-chips{top:88px;padding:10px 0}}
+/* 컬처 팀 아코디언(데스크톱): 행 간격 축소 (38/24px → 16px) */
+@media(min-width:1001px){
+ html body.approved-culture #team .acc__head{padding:16px 0!important}
+ html body.approved-culture #team .art-acc{gap:0!important}
+}
+/* 복지 칩 스티키 위치: 왼쪽 'Benefits' 사이드 타이틀 윗선(헤더+31px)에 맞춤 — 타이틀 위로 넘어가지 않게 */
+@media(min-width:1001px){html body.approved-culture #benefits .art-chips{top:107px}}
+/* 채용(데스크톱): 섹션 제목(Open Positions·FAQ)을 컬처처럼 왼쪽 열에 두고 스크롤 시 스티키 — 제목은 흐름에서 높이를 차지하지 않게(음수 하단 마진) 내용과 같은 윗선에서 시작 */
+@media(min-width:1001px){
+ html body.approved-recruit .art-body>.art-sec>.approved-section-title{position:sticky!important;top:119px!important;z-index:5;line-height:1.1!important;margin-bottom:-1.1em!important;overflow:visible}
+ html body.approved-recruit .art-body>#faq>.approved-section-title{margin-left:calc(100% - var(--page-content-width))!important}
+}
+/* ---------- QA 보정 ---------- */
+/* 11px 라벨 → 12px 하한 (BORN IN KOREA 등) */
+html body.approved-page .editorial-label{font-size:max(12px,1em)!important}
+@media(max-width:700px){html body.approved-page .editorial-label{font-size:12px!important}}
+/* 모바일 터치 타겟: 푸터 링크·인터뷰 링크 높이 44px 확보 */
+@media(max-width:700px){
+ html body.approved-page .approved-footer a{display:inline-block;padding:10px 0;min-height:44px;box-sizing:border-box}
+ html body.approved-page .approved-interview{display:inline-flex;align-items:center;min-height:44px;padding:8px 0}
+ html body.approved-page .approved-logo{display:inline-flex;align-items:center;min-height:44px}
+}
+/* 미연결 링크(Articles · EN/JP)는 눌러도 페이지 상단으로 튀지 않게 커서만 표시 */
+html body.approved-page a.ext[href="#"]{cursor:default;opacity:.6}
+
+/* ===== 배포본(챗지피티 10/30 보정) 중 메인·채용 관련만 유지, 컬처는 이 파일 상단의 설계 버전 사용 ===== */
+/* 10/30 review: give the Olive Young mark and growth arrow breathing room from the panel edge. */
+@media(max-width:600px){
+ html body.feedback-v2 .growth-ill-rank .growth-art-layer.ill-arrow img[src*="rank-3a9fc"]{transform:translateX(-3%) scale(.96)!important}
+ html body.feedback-v2 .growth-ill-rank .growth-art-layer img[src*="rank-7c66c"]{transform:translateX(5%) scale(1.2)!important}
+}
+
+/* 10/30 review: channel logos with solid white canvases blend into the white strip. */
+html body.approved-company .channel-marquee .channel-mark{background:#fff!important}
+html body.approved-company .channel-marquee .channel-mark img{mix-blend-mode:multiply}
+
+/* 10/30 follow-up: center the growth section's eyebrow label. */
+html body.feedback-v2 .growth-tags-heading>p:first-child{text-align:center!important;margin-inline:auto!important}
+
+/* 10/30 review: keep the first product title centered and inside its card. */
+html body.approved-company .product-face-back h3{width:100%!important;max-width:100%!important;margin-inline:auto!important;text-align:center!important;font-size:clamp(17px,1.95vw,25px)!important;line-height:1.08!important;letter-spacing:-.045em!important;text-wrap:balance;overflow-wrap:anywhere!important;word-break:normal!important}
+@media(max-width:700px){html body.approved-company .product-face-back h3{font-size:clamp(13px,3.9vw,17px)!important;line-height:1.08!important}}
+
+/* 10/30 mobile: keep the talent section title on one line at a consistent size. */
+html body.approved-culture .talent-profile__heading h2{white-space:nowrap!important;font-size:clamp(26px,6.5vw,36px)!important;line-height:1.1!important;letter-spacing:-.035em!important}
+/* 컬처 일하는 방식 카드: 본문 글자 크기 통일(고정 줄바꿈 없는 첫 카드 포함) — 데스크톱 14px/1.7, 모바일은 기존 --m-body */
+@media(min-width:701px){html body.approved-culture .cx-card__more p{font-size:17px!important;line-height:1.7!important;letter-spacing:-.01em!important}}
+/* 복지 칩 아래 구분선 한 줄만 (스티키 바 그림자 선 제거), 마우스 클릭 시 포커스 링 숨김 */
+html body.approved-culture #benefits .art-chips{box-shadow:none}
+html body.approved-page .art-chip:focus:not(:focus-visible){outline:none!important;box-shadow:none!important}
+/* 흐름 캡션: 한 줄 "WE MAKE WHAT WE WISH EXISTED." 중앙 정렬 (오른쪽 문구는 제거) */
+html body.approved-company .approved-flow-caption .reimagine-flow-right{display:none!important}
+html body.approved-company .approved-flow-caption{justify-content:center!important}
+html body.approved-company .approved-flow-caption .reimagine-flow-left{text-align:center!important;width:auto!important;max-width:none!important;left:auto!important;right:auto!important}
+html body.approved-company .approved-flow-caption .reimagine-flow-left .flow-categories{text-align:center!important}
+/* 채널 로고: 배경 제거한 투명 PNG 사용 → 흰 박스/블렌드 불필요 */
+html body.approved-company .channel-marquee .channel-mark{background:transparent!important}
+html body.approved-company .channel-marquee .channel-mark img{mix-blend-mode:normal!important}
+/* 채널 로고 img 자체의 회색 플레이스홀더 배경(.approved-page img{background:#f0f0ee}) 제외 */
+html body.approved-page .channel-mark img,html body.approved-page .channel-marquee img{background:transparent!important}
+/* 유니콘 프로덕트 펼침 레일: 3세트를 이어 붙여 무한 순환하고, 펼쳐진 뒤 오른쪽 영역에서만 보이게 한다. */
+html body.approved-company .unicorn-mask-section:not(.is-previous-spread) .unicorn-unfold-carousel .product-project:nth-child(-n+4),
+html body.approved-company .unicorn-mask-section:not(.is-previous-spread) .unicorn-unfold-carousel .product-project:nth-child(n+9){display:block!important}
+html body.approved-company .unicorn-mask-section:not(.is-previous-spread) .unicorn-unfold-carousel .product-carousel-track{transform:translate3d(calc(var(--unfold-origin,0px) - 4 * (var(--project-width,0px) + var(--project-gap,0px))),0,0)!important}
+html body.approved-company .unicorn-mask-section:not(.is-previous-spread) .unicorn-unfold-carousel.is-spread{position:absolute!important;overflow-x:clip!important;overflow-y:visible!important;scrollbar-width:none!important}
+/* 컬처 카드 본문: 첫 카드와 동일하게 14px·자연 줄바꿈 (고정 줄 해제) */
+html body.approved-culture .cx-card__more p.cx-fixed{display:block!important;white-space:normal!important;word-break:keep-all!important;overflow-wrap:break-word!important}
+html body.approved-culture .cx-card__more p.cx-fixed .fx-line{display:inline!important;white-space:normal!important;font-size:inherit!important}
+html body.approved-culture .cx-card__more p.cx-fixed .fx-line:not(:last-child)::after{content:" "}
+html body.approved-culture .cx-card__more p.cx-fixed .fx-gap{display:block!important;height:.9em!important}
+/* 베네핏 직군 칩: 헤더 바로 아래부터 흰 배경으로 채워 스크롤되는 텍스트가 사이로 비치지 않게 */
+@media(min-width:701px){html body.approved-culture #benefits .art-chips{top:88px!important;padding-top:31px!important}}
+/* 유니콘 프로덕트 펼침 레일: 오른쪽 끝은 페이드 처리, 호버한 카드는 다른 카드 위로 올라와 뒤집힌 면을 가리지 않음 */
+html body.approved-company .unicorn-mask-stage>.unicorn-unfold-carousel.is-spread{z-index:60!important}
+html body.approved-company .unicorn-unfold-carousel.is-spread::after{content:"";position:absolute;z-index:70;top:0;right:0;bottom:0;width:clamp(36px,7vw,112px);background:linear-gradient(90deg,transparent,#000 94%);opacity:1;pointer-events:none;transition:opacity .2s ease}
+html body.approved-company .unicorn-unfold-carousel.is-spread:has(.product-project:hover)::after,html body.approved-company .unicorn-unfold-carousel.is-spread:has(.product-project:focus-within)::after{opacity:0}
+html body.approved-company .unicorn-unfold-carousel.is-spread .product-project:hover,html body.approved-company .unicorn-unfold-carousel.is-spread .product-project:focus-within{z-index:999!important;overflow:visible!important}
+/* 브랜드 카드 배경: 레드 #E60012 (10/30 민주님 요청) */
+html body.approved-company .product-project .brand-project-art{background:#E60012!important}
+html body.approved-company .brand-project-art img{background:transparent!important}
+@media(min-width:701px){html body.approved-culture .cx-card__more p.cx-fixed{font-size:17px!important;line-height:1.7!important;letter-spacing:-.01em!important}}
+@media(max-width:700px){html body.approved-culture .cx-card__more p.cx-fixed{font-size:var(--m-body)!important;line-height:1.65!important}}
+/* 유니콘 프로덕트: 펼쳐진 뒤에도 두 번째 캡처의 두 줄 타이틀을 왼쪽에 고정 */
+html body.approved-company .unicorn-stack-title.is-top{position:absolute!important;top:50%!important;left:clamp(24px,5vw,100px)!important;transform:translateY(-50%)!important;width:clamp(300px,31vw,640px)!important;max-width:32vw!important;margin:0!important;text-align:center!important;font-size:clamp(36px,4.2vw,86px)!important;font-weight:800!important;line-height:.9!important;letter-spacing:-.055em!important;align-self:auto!important;justify-self:auto!important;z-index:80!important;transition:opacity .4s ease,top .4s ease,left .4s ease,width .4s ease,transform .4s ease!important;white-space:normal!important}
+html body.approved-company .unicorn-stack-title.is-top>span:first-child{display:block!important;margin:0 0 .16em!important;font-size:clamp(11px,1.1vw,18px)!important;font-weight:500!important;line-height:1.2!important;letter-spacing:.06em!important;text-align:right!important;text-transform:uppercase!important}
+html body.approved-company .unicorn-stack-title.is-top>span+span{display:block!important;margin:0!important;text-align:center!important;line-height:.9!important;white-space:normal!important}
+html body.approved-company .unicorn-stack-title.is-top br{display:block!important}
+@media(max-width:767px){html body.approved-company .unicorn-stack-title.is-top{top:4%!important;left:0!important;transform:none!important;width:100%!important;max-width:100%!important;font-size:clamp(30px,7vw,54px)!important;text-align:center!important}html body.approved-company .unicorn-stack-title.is-top>span:first-child{text-align:center!important}html body.approved-company .unicorn-stack-title.is-top>span+span{text-align:center!important}}
+/* 채용 Join us 사진은 장식 이미지로 유지하고 클릭 입력은 받지 않음 */
+html body.approved-culture #culture-end .art-next__visual{pointer-events:none!important;cursor:default!important}
+/* 성장 섹션 머리말 "TURNS OUT, …" 가운데 정렬 (박스 폭이 글보다 좁아 오른쪽으로 삐져나오던 것 수정) */
+html body.approved-company .growth-tags-heading>p{width:max-content!important;max-width:100%!important;margin-inline:auto!important;text-align:center!important}
+/* 매장 사진(Olive Young's Pick / Offline Store): 한글 설명은 평소 숨김, 마우스를 올리거나 누르면 표시 (터치 기기 포함) */
+html body.approved-page .retail-collection__photos figcaption{opacity:0!important;transform:translateY(8px)!important;transition:opacity .3s ease,transform .3s ease!important}
+html body.approved-page .retail-collection__photos figcaption>*{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:keep-all}
+html body.approved-page .retail-collection__photos figure{cursor:pointer}
+html body.approved-page .retail-collection__photos figure img{transition:transform .5s cubic-bezier(.22,.61,.36,1),filter .3s ease}
+@media(hover:hover){html body.approved-page .retail-collection__photos figure:hover figcaption{opacity:1!important;transform:none!important}
+html body.approved-page .retail-collection__photos figure:hover img{filter:brightness(.72)}}
+html body.approved-page .retail-collection__photos figure.is-caption-open figcaption,html body.approved-page .retail-collection__photos figure:focus-visible figcaption{opacity:1!important;transform:none!important}
+html body.approved-page .retail-collection__photos figure.is-caption-open img{filter:brightness(.72)}
+html body.approved-page .retail-collection__photos figure:focus:not(:focus-visible){outline:none}
+/* 모바일 NO.1 카드: OLIVE YOUNG 워드마크를 일러스트 위가 아니라 설명 문구 옆(오른쪽 검정 영역)에 */
+@media(max-width:700px){html body.feedback-v2 .growth-cascade-card.metric-rank .approved-olive-logo{top:calc(12% + clamp(62px,17vw,90px) + 18px + 1.4em)!important;bottom:auto!important;right:22px!important;left:auto!important;width:32%!important;max-width:150px!important;height:auto!important;max-height:none!important;margin:0!important;object-fit:contain}}
+/* 글로벌 도시 섹션: 뷰포트 기준 하단 여백 40px 확보 — 도시 줄 3개가 남은 높이(--city-avail, JS가 계산) 안에 들어가도록 크기 제한 */
+@media(min-width:768px){html body.approved-company .city-film-rows{--city-height:min(clamp(80px,9.3vw,210px),calc((var(--city-avail,9999px) - 4.8vw) / 3));--city-type:calc(var(--city-height) * .95)}}
+html body.approved-company .city-expanded-film video{object-fit:cover;width:100%;height:100%}
+/* Our Team 설명: 피그마 고정 줄바꿈 대신 사이트 폭에 맞춰 자연 줄바꿈 (줄 끝에 공백 한 칸) */
+html body.approved-culture #team .acc__body p.fx-fixed{white-space:normal!important;word-break:keep-all!important;overflow-wrap:break-word!important}
+html body.approved-culture #team .acc__body p.fx-fixed .fx-line{display:inline!important;white-space:normal!important}
+html body.approved-culture #team .acc__body p.fx-fixed .fx-line:not(:last-child)::after{content:" "}
+html body.approved-culture #team .acc__body p.fx-fixed .fx-gap{display:block!important;height:.9em!important}
+/* 성장 카드 쌓임 효과: 원래 화면 높이 760px 이상에서만 켜지던 것을 600px 이상으로 확대 (노트북 등 낮은 화면에서도 카드가 겹쳐 쌓이며 뒤 카드는 살짝 작아지고 어두워짐) */
+@media(min-width:901px) and (min-height:600px) and (max-height:759px){
+ html body.feedback-v2 .growth-cascade-card{position:sticky!important;top:calc(100px + var(--growth-heading-height) + var(--card-index)*12px + var(--growth-release,0px))!important;height:min(31vw,480px,calc(100svh - var(--growth-heading-height) - 150px))!important;min-height:300px!important;transform:scale(var(--proof-scale,1))!important;filter:brightness(var(--proof-light,1))!important}
+ html body.feedback-v2 .growth-cascade>.growth-tags-heading{position:sticky!important;top:calc(100px + var(--growth-release,0px))!important}
+}
+/* 성장 카드 쌓임 효과: 701~900px 폭(태블릿·좁은 창)에서도 데스크톱처럼 겹쳐 쌓임 (원래는 이 폭에서 카드가 순서대로 풀려 내려감) */
+@media(min-width:701px) and (max-width:900px) and (min-height:600px){
+ html body.feedback-v2 .growth-cascade-card,html body.feedback-v2 .growth-cascade-card:not(:first-child){position:sticky!important;top:calc(100px + var(--growth-heading-height) + var(--card-index)*12px + var(--growth-release,0px))!important;height:min(340px,calc(100svh - var(--growth-heading-height) - 150px))!important;min-height:260px!important;transform:scale(var(--proof-scale,1))!important;filter:brightness(var(--proof-light,1))!important}
+ html body.feedback-v2 .growth-cascade>.growth-tags-heading{position:sticky!important;top:calc(100px + var(--growth-release,0px))!important}
+}
+/* 모바일 메뉴 버튼: 호버·포커스·열림 상태에서도 자리와 크기 고정, X 아이콘은 정확히 가운데 */
+@media(max-width:700px){
+ html body .approved-header .approved-menu-toggle,html body .approved-header .approved-menu-toggle:hover,html body .approved-header .approved-menu-toggle:focus,html body .approved-header .approved-menu-toggle:active,html body .approved-header.is-menu-open .approved-menu-toggle{position:absolute!important;top:50%!important;right:16px!important;transform:translateY(-50%)!important;width:44px!important;height:44px!important;padding:0!important;margin:0!important;border:0!important;box-shadow:none!important;transition:background-color .15s ease}
+ html body .approved-header .approved-menu-toggle:hover{background:#e6e6e6!important}
+ html body .approved-header .approved-menu-toggle:focus:not(:focus-visible){outline:none}
+ html body .approved-header.is-menu-open .approved-menu-toggle__close{display:flex!important;align-items:center;justify-content:center;width:100%;height:100%;font-size:20px;line-height:1;transform:translateY(-1px)}
+}
+/* 모바일 Culture: 본문은 한 흐름으로 읽히게 두고, 카드 설명은 스크롤에 들어올 때 펼친다. */
+@media(max-width:700px){
+ html body.approved-culture .cx-scroll{position:relative!important;height:auto!important;min-height:0!important;margin:0!important;overflow:visible!important;padding-block:var(--section-gap)!important}
+ html body.approved-culture .cx-stage{position:relative!important;top:auto!important;height:auto!important;min-height:0!important;overflow:visible!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:24px!important}
+ html body.approved-culture .cx-actor,html body.approved-culture .cx-lay--a,html body.approved-culture .cx-hint{display:none!important}
+ html body.approved-culture .cx-lay--b{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:0!important;padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;opacity:1!important;visibility:visible!important;transform:none!important;order:0}
+ html body.approved-culture .cx-lay--b .cx-fade-b{opacity:1!important;transform:none!important}
+ html body.approved-culture .cx-lay [data-slot]{visibility:visible!important}
+ html body.approved-culture .cx-cards{position:relative!important;inset:auto!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;width:100%!important;height:auto!important;transform:none!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:start!important;gap:12px!important;order:1}
+ html body.approved-culture .cx-card{position:relative!important;width:100%!important;min-width:0!important;transform:none!important;opacity:1!important}
+ html body.approved-culture .cx-card__more{display:grid!important;grid-template-rows:0fr!important;height:auto!important;opacity:1!important;overflow:hidden!important;transition:grid-template-rows .65s cubic-bezier(.22,1,.36,1)!important}
+ html body.approved-culture .cx-card__more>div{min-height:0!important;margin-top:0!important;padding:0!important;overflow:hidden!important;opacity:0!important;transform:translateY(-10px) scaleY(.98)!important;transition:transform .5s cubic-bezier(.22,1,.36,1),opacity .3s ease,margin .5s ease,padding .5s ease!important}
+ html body.approved-culture .cx-card.is-mobile-expanded .cx-card__more{grid-template-rows:1fr!important}
+ html body.approved-culture .cx-card.is-mobile-expanded .cx-card__more>div{margin-top:12px!important;padding:20px!important;opacity:1!important;transform:none!important}
+}
+/* Recruit mobile: anchor the crop at the photo's top so the person's face stays in frame. */
+@media(max-width:700px){
+ html body.approved-recruit .art-hero__photo img{object-position:50% 0%!important}
+}
+/* 입사 축하금 띠: 누르면 설명이 띠 안에서 아래에서 위로 떠오르듯 나타남 (다른 요소는 그대로) */
+html body.approved-recruit #bonus .art-bonus__body>div{transform:translateY(14px);opacity:0;transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .35s ease}
+html body.approved-recruit #bonus.is-open .art-bonus__body>div{transform:none;opacity:1;transition-delay:.08s}
+html body.approved-recruit #bonus .art-bonus__head{scroll-margin-top:120px}
+@media(prefers-reduced-motion:reduce){html body.approved-recruit #bonus .art-bonus__body>div{transition:none;transform:none;opacity:1}}
+/* Journey(모바일): 고정 최소 높이 때문에 마지막 단계 아래가 비던 것 제거, 안내문과의 간격 정리 */
+@media(max-width:700px){
+ html body.approved-recruit .process-track{min-height:0!important;padding-bottom:4px!important}
+ html body.approved-recruit .process-note{margin-top:28px!important}
+}
+/* SEO·접근성: 모바일 최소 글자 12px (BORN IN KOREA… 라벨이 11px로 떨어지던 것) */
+html body.approved-company main .global-cities-intro.editorial-heading>p.editorial-label,html body.approved-company main .growth-tags-heading>p{font-size:clamp(12px,.85vw,13px)!important}
+/* 입사 축하금 띠: 모든 화면에서 위쪽 왼·오른 모서리만 라운딩, 클릭 후 생기던 진한 테두리선 제거(키보드 이동 때만 안쪽 테두리) */
+html body.approved-recruit #bonus.art-bonus{border-radius:10px 10px 0 0!important;overflow:hidden!important}
+html body.approved-recruit #bonus .art-bonus__head{border-radius:10px 10px 0 0!important;outline:none!important;box-shadow:none!important}
+html body.approved-recruit #bonus .art-bonus__head:focus-visible{box-shadow:inset 0 0 0 2px rgba(255,255,255,.85)!important}
+/* 메인 모델샷 옆 제품명: 단어 중간에서 끊기지 않게(줄은 <br> 기준만), 좁은 화면에선 글자 크기를 칸에 맞춰 줄임 */
+html body.approved-company .unicorn-stack-detail h3{white-space:nowrap!important;overflow-wrap:normal!important;word-break:keep-all!important;font-size:min(36px,2.5vw)!important}
+@media(max-width:700px){html body.approved-company .unicorn-stack-detail h3{font-size:min(28px,7vw)!important}}
+/* 메인 모델샷 카드 뒷면 제품명 확대 (웹·모바일), 단어 중간 끊김 없이 */
+html body.approved-company .product-face-back h3{font-size:clamp(22px,2.3vw,36px)!important;line-height:1.02!important;white-space:nowrap!important;overflow-wrap:normal!important;word-break:keep-all!important}
+@media(max-width:700px){html body.approved-company .product-face-back h3{font-size:clamp(24px,7vw,30px)!important}}
+/* 컬처 Who we look for 타이틀: Benefits·Our Team 과 같은 크기·굵기·자간 */
+@media(min-width:701px){html body.approved-culture #talent .talent-profile__heading h2{font-size:var(--type-section)!important;font-weight:600!important;letter-spacing:-.045em!important;line-height:1.15!important}}
+html body.approved-culture #talent .talent-profile__heading h2{font-weight:600!important}
+/* 리크루트 모바일 상단 모델샷: 잘리지 않게 사진 원래 비율(1122×1402) 그대로 */
+@media(max-width:700px){
+ html body.approved-recruit .art-hero__photo{height:auto!important;aspect-ratio:1122/1402!important;max-height:none!important}
+ html body.approved-recruit .art-hero__photo img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 50%!important}
+}
+/* 리크루트 모바일 모델샷: 첫 화면에 빨간 띠가 보이도록 화면 높이에 맞춤(사진 원래 높이 이하, 신발 쪽만 살짝 잘림) */
+@media(max-width:700px){
+ html body.approved-recruit .art-hero__photo{aspect-ratio:auto!important;height:clamp(170px,min(calc(100svh - 480px),calc((100vw - 32px) * 1.2496)),560px)!important}
+ html body.approved-recruit .art-hero__photo img{object-position:50% 12%!important}
+}
+/* 입사 축하금 띠(모바일): 한 줄로 — 화면 폭에 맞춰 글자 크기 자동(최대 16px) */
+@media(max-width:700px){
+ html body.approved-recruit #bonus .art-bonus__head span{white-space:nowrap!important;font-size:min(16px,calc((100vw - 70px) / 20.2))!important}
+}
+/* 리크루트 모바일 모델샷: 화면 높이와 무관하게 폭 기준 고정 크기(신발만 살짝 잘림) — 사진이 짧게 잘리지 않도록 */
+@media(max-width:700px){
+ html body.approved-recruit .art-hero__photo{aspect-ratio:auto!important;height:min(calc((100vw - 32px) * 1.045),560px)!important}
+ html body.approved-recruit .art-hero__photo img{object-position:50% 30%!important}
+}
+/* 리크루트(모바일) 입사 축하금 띠: 화면 하단 고정(자리에 닿으면 안착) + 펼치면 레이아웃을 밀지 않고 위로 올라오는 패널 */
+@media(max-width:700px){
+ html body.approved-recruit #bonus.art-bonus{overflow:visible!important;position:relative;z-index:60}
+ html body.approved-recruit #bonus.art-bonus.is-floating{position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;margin:0!important;z-index:900!important}
+ html body.approved-recruit #bonus .art-bonus__body{position:absolute!important;left:0;right:0;bottom:100%;background:#e52925;color:#fff;border-radius:10px 10px 0 0;box-shadow:0 -10px 24px rgba(0,0,0,.12)}
+ html body.approved-recruit #bonus .art-bonus__body p{padding:22px 20px 18px!important}
+ html body.approved-recruit #bonus.is-open .art-bonus__head{border-radius:0!important}
+ html body.approved-recruit #bonus.is-open .art-bonus__arrow{transform:rotate(180deg)}
+ html body.approved-recruit .art-bonus-slot{display:block}
+}
+@media(max-width:700px){html body.approved-recruit #bonus.art-bonus.is-open{border-radius:0!important}html body.approved-recruit #bonus.is-open .art-bonus__head{border-radius:0!important}}
+/* 리크루트 모바일: 헤더-타이틀 간격 축소(서브 텍스트가 첫 화면에 보이도록), 입사 축하금 본문 글자 약간 축소 */
+@media(max-width:700px){
+ html body.approved-recruit .art-hero__inner{padding-top:108px!important;gap:20px!important}
+ html body.approved-recruit #bonus .art-bonus__body p{font-size:14.5px!important;line-height:1.7!important}
+}
+/* 리크루트 모바일: 화면 높이가 낮은 폰에서도 서브 텍스트가 축하금 띠 위로 보이도록 사진 높이를 화면 높이에 맞춤 */
+@media(max-width:700px){
+ html body.approved-recruit .art-hero__photo{height:max(240px,min(calc((100vw - 32px) * 1.045),560px,calc(100vh - 360px)))!important}
+ @supports(height:100svh){html body.approved-recruit .art-hero__photo{height:max(240px,min(calc((100vw - 32px) * 1.045),560px,calc(100svh - 360px)))!important}}
+}
+/* 모바일 NO.1 카드: 화살표만 따로 옮기던 보정(-3%, 96%) 제거 → 빨간 판·회색 기둥과 이음새가 PC처럼 정확히 맞도록 */
+@media(max-width:600px){html body.feedback-v2 .growth-ill-rank .growth-art-layer.ill-arrow img[src*="rank-3a9fc"]{transform:none!important}}
+/* 컬처 모바일: 상단 여백·간격을 리크루트와 통일(헤더 아래 20px, 간격 20px), 줄어든 48px 만큼 사진을 키움 */
+@media(max-width:700px){
+ html body.approved-culture .art-hero__inner{padding-top:108px!important;gap:20px!important}
+ html body.approved-culture .art-hero__photo{aspect-ratio:auto!important;height:calc(min((100vw - 32px) * 1.045, 560px) + 48px)!important}
+}
+/* 컬처·리크루트 모바일: 상단 소개 문구 왼쪽 정렬(사진 폭에 맞춤) */
+@media(max-width:700px){
+ html body.approved-culture .art-hero__intro,html body.approved-recruit .art-hero__intro{text-align:left!important;width:100%!important;max-width:none!important;margin-inline:0!important;align-self:stretch!important;justify-self:stretch!important}
+}
+/* 컬처 모바일: 화면이 낮은 폰에서도 소개 문구가 첫 화면에 다 보이도록 사진 높이를 화면 높이에 맞춤(넉넉한 폰은 키운 크기 유지) */
+@media(max-width:700px){
+ html body.approved-culture .art-hero__photo{height:max(220px,min(calc(min((100vw - 32px) * 1.045, 560px) + 48px),calc(100vh - 415px)))!important}
+ @supports(height:100svh){html body.approved-culture .art-hero__photo{height:max(220px,min(calc(min((100vw - 32px) * 1.045, 560px) + 48px),calc(100svh - 415px)))!important}}
+}
+/* 컬처 상단 사진: 원본에서 같은 구도를 고화질로 다시 잘라 사용, 머리 위 공간이 조금 더 보이도록 위쪽 기준으로 맞춤 */
+html body.approved-culture .art-hero__photo img{object-fit:cover!important;object-position:50% 22%!important}
+/* 리크루트 모바일: 상단 소개 문구 스타일을 컬처와 동일하게(16px, #3F434A, 400) */
+@media(max-width:700px){html body.approved-recruit .art-hero__intro{font-size:16px!important;line-height:1.65!important;color:#3f434a!important;font-weight:400!important;letter-spacing:-.03em!important}}
+/* 뒤집힌 제품 카드 이름: 카드 폭보다 길면 잘리고 가운데 정렬이 깨지므로, 카드 폭에 맞춰 글자 크기를 제한(가장 긴 단어 CRUNCHBALL 기준) */
+html body.approved-company .product-face-back h3{font-size:min(clamp(22px,2.3vw,36px),calc((var(--project-width,400px) - 30px) / 6.9))!important}
+@media(max-width:700px){html body.approved-company .product-face-back h3{font-size:min(clamp(24px,7vw,30px),calc((var(--project-width,186px) - 30px) / 6.9))!important}}
+/* 메인 모바일: 'WHAT IS A UNICORN'~제품 카드 구간이 너무 오래 머물러서 스크롤 길이를 약 22% 줄임(1050svh → 820svh, 연출 순서·비율은 그대로) */
+@media(max-width:767px){html body.approved-company .unicorn-mask-section.has-linked-flow{height:820svh!important}}
+/* ===== 모바일 헤더 슬림화(토스 채용 참고): 88px → 56px, 로고·메뉴 버튼 축소, 헤더 기준 위치값 -32px ===== */
+@media(max-width:700px){
+ html body .approved-header{min-height:56px!important;height:56px!important;padding-top:0!important;padding-bottom:0!important}
+ html body .approved-header .approved-logo svg{height:24px!important;width:auto!important}
+ html body .approved-header .approved-menu-toggle{width:36px!important;height:36px!important;border-radius:8px!important}
+ html body .approved-header .approved-menu-toggle__bars{width:18px!important;gap:4px!important}
+ html body .approved-header .approved-menu-toggle__bars i{height:2px!important;border-radius:1px!important;flex:none!important} /* 선 두께는 정수 px 로(소수점이면 선마다 굵기가 달라 보임) */
+ html body .approved-header.is-menu-open .approved-menu-toggle__close{font-size:17px!important}
+ html body .approved-header.is-menu-open nav{padding-top:84px!important}
+ html body .approved-header.is-menu-open nav::before{top:80px!important}
+ /* 메인 */
+ html:root{scroll-padding-top:46px}
+ html body.approved-company .unicorn-mask-stage{top:56px!important;height:calc(100svh - 56px)!important}
+ html body.approved-company .global-cities-section{--global-pin-top:44px}
+ /* 컬처·채용 */
+ html body.approved-culture .art-hero__inner,html body.approved-recruit .art-hero__inner{padding-top:76px!important}
+ html body.approved-recruit .art-hero__photo{height:max(240px,min(calc((100vw - 32px) * 1.045),560px,calc(100vh - 328px)))!important}
+ html body.approved-culture .art-hero__photo{height:max(220px,min(calc(min((100vw - 32px) * 1.045, 560px) + 48px),calc(100vh - 383px)))!important}
+ html body.approved-culture #talent{top:64px!important}
+ html body.approved-culture #benefits .art-chips{top:56px!important}
+ html body:is(.approved-culture,.approved-recruit) .art-side__top{top:87px!important}
+}
+@media(max-width:700px){@supports(height:100svh){
+ html body.approved-recruit .art-hero__photo{height:max(240px,min(calc((100vw - 32px) * 1.045),560px,calc(100svh - 328px)))!important}
+ html body.approved-culture .art-hero__photo{height:max(220px,min(calc(min((100vw - 32px) * 1.045, 560px) + 48px),calc(100svh - 383px)))!important}
+}}
+@media(max-width:700px){html body .approved-header .approved-menu-toggle,html body .approved-header .approved-menu-toggle:hover,html body .approved-header .approved-menu-toggle:focus,html body .approved-header .approved-menu-toggle:active,html body .approved-header.is-menu-open .approved-menu-toggle{width:36px!important;height:36px!important;border-radius:8px!important;top:10px!important;transform:none!important}} /* 세로 위치를 정수 px 로 고정(50% 기준이면 테두리 1px 때문에 반 픽셀에 걸려 아이콘이 흐려짐) */
+/* 메인 모바일 'WE MAKE WHAT WE WISH EXISTED.': 문구 상자가 245px 고정이라 아이폰 글꼴(더 넓음)에선 넘쳐 오른쪽으로 밀림 → 상자를 캡션 폭에 맞춰 항상 가운데 */
+@media(max-width:767px){html body.approved-company .approved-flow-caption .reimagine-flow-left{width:100%!important;max-width:none!important;margin-inline:0!important;text-align:center!important}html body.approved-company .approved-flow-caption .flow-categories{display:block!important;width:100%!important;max-width:none!important;margin:0!important;justify-self:stretch!important;white-space:nowrap!important;text-align:center!important}}
+/* 메인 영상: 아이폰이 자동재생을 막을 때 뜨는 기본 재생(▶) 버튼을 숨겨 '일시정지'처럼 보이지 않게(그 사이엔 첫 장면 이미지가 보임) */
+html body .hero-film-fallback{pointer-events:none}
+html body .hero-film-fallback::-webkit-media-controls,html body .hero-film-fallback::-webkit-media-controls-panel,html body .hero-film-fallback::-webkit-media-controls-start-playback-button,html body .hero-film-fallback::-webkit-media-controls-overlay-play-button{display:none!important;-webkit-appearance:none!important;opacity:0!important}

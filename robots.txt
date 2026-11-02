@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /approved-company.html
+
+Sitemap: https://about.yourunicorn.world/sitemap.xml
