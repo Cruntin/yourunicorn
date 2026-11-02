@@ -52,4 +52,5 @@ jobs:
         if: steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "재배포 요청 실패: 푸시로 배포가 시작되었는지 확인"
+        run: |
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "재배포 요청 실패 - 푸시로 배포가 시작되었는지 확인"
