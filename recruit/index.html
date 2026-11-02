@@ -76,18 +76,31 @@
 
 
 
-        <!-- 03 공고 리스트 — 현재 유어유니콘 채용 공고(나인하이어, 10건 · 2026-09-25 기준) / 직군 필터 -->
+        <!-- 03 공고 리스트 — 나인하이어 API로 생성(scripts/ninehire_jobs.py --write) / 직군 필터 -->
         <section data-review-section="positions" class="art-sec" id="positions"><h2 class="approved-section-title">Open Positions</h2>
           
+          <!-- ninehire-jobs:start -->
           <div class="art-chips" role="toolbar" aria-label="직군 필터">
-            <button type="button" class="art-chip is-on" data-job-filter="">전체<span>10</span></button>
+            <button type="button" class="art-chip is-on" data-job-filter="">전체<span>12</span></button>
             <button type="button" class="art-chip" data-job-filter="Business">Business<span>2</span></button>
             <button type="button" class="art-chip" data-job-filter="SCM">SCM<span>1</span></button>
-            <button type="button" class="art-chip" data-job-filter="디자인">디자인<span>2</span></button>
-            <button type="button" class="art-chip" data-job-filter="마케팅">마케팅<span>4</span></button>
-            <button type="button" class="art-chip" data-job-filter="채널관리">채널관리<span>1</span></button>
+            <button type="button" class="art-chip" data-job-filter="디자인">디자인<span>1</span></button>
+            <button type="button" class="art-chip" data-job-filter="마케팅">마케팅<span>5</span></button>
+            <button type="button" class="art-chip" data-job-filter="채널관리">채널관리<span>3</span></button>
           </div>
           <div class="art-jobs" data-jobs="">
+            <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/gECFA2XT" target="_blank" rel="noopener" data-group="채널관리">
+              <p class="job__title">MD 리드</p>
+              <p class="job__meta"><span>Channel</span><span>경력 7년+</span><span>정규직</span></p>
+            </a>
+            <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/eepV29pW" target="_blank" rel="noopener" data-group="채널관리">
+              <p class="job__title">리테일 MD</p>
+              <p class="job__meta"><span>Channel</span><span>신입</span><span>정규직</span></p>
+            </a>
+            <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/Ow61t9Fx" target="_blank" rel="noopener" data-group="SCM">
+              <p class="job__title">품질 관리 담당자</p>
+              <p class="job__meta"><span>SCM</span><span>경력 3년+</span><span>정규직</span></p>
+            </a>
             <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/aib44uDA" target="_blank" rel="noopener" data-group="Business">
               <p class="job__title">CEO Staff</p>
               <p class="job__meta"><span>AI·Data</span><span>신입</span><span>인턴</span></p>
@@ -108,17 +121,13 @@
               <p class="job__title">재무 담당자</p>
               <p class="job__meta"><span>Finance</span><span>경력 2년+</span><span>정규직</span></p>
             </a>
-            <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/ZqijLYAd" target="_blank" rel="noopener" data-group="SCM">
-              <p class="job__title">물류 운영 담당자</p>
-              <p class="job__meta"><span>SCM</span><span>경력무관</span><span>정규직</span></p>
+            <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/W9c2HIPC" target="_blank" rel="noopener" data-group="마케팅">
+              <p class="job__title">콘텐츠 마케터</p>
+              <p class="job__meta"><span>Marketing</span><span>신입</span><span>정규직</span></p>
             </a>
             <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/l7kUBxE1" target="_blank" rel="noopener" data-group="마케팅">
               <p class="job__title">퍼포먼스 마케터</p>
               <p class="job__meta"><span>Marketing</span><span>경력 2년+</span><span>정규직</span></p>
-            </a>
-            <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/dOulq4zK" target="_blank" rel="noopener" data-group="디자인">
-              <p class="job__title">콘텐츠 디자이너</p>
-              <p class="job__meta"><span>Design</span><span>경력 2년+</span><span>정규직</span></p>
             </a>
             <a class="job job--clean" href="https://article.yourunicorn.world/job_posting/GUzXqnrp" target="_blank" rel="noopener" data-group="채널관리">
               <p class="job__title">온라인 MD</p>
@@ -129,6 +138,7 @@
               <p class="job__meta"><span>Marketing</span><span>경력 2년+</span><span>정규직</span></p>
             </a>
           </div>
+          <!-- ninehire-jobs:end -->
           <p class="art-jobs__empty" hidden>해당 직군의 공고가 없습니다.</p>
         </section>
 
