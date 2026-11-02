@@ -1,0 +1,55 @@
+# 나인하이어 공고가 바뀌면 Recruit 페이지 공고 목록을 다시 만든다.
+# - repository_dispatch(ninehire-job-updated): 나인하이어 웹훅을 받은 중계 서버가 호출
+# - schedule: 웹훅이 누락될 때를 대비한 하루 1회 보조 실행
+# - workflow_dispatch: Actions 화면에서 직접 실행
+name: 나인하이어 공고 동기화
+
+on:
+  repository_dispatch:
+    types: [ninehire-job-updated]
+  schedule:
+    - cron: "0 0 * * *" # 매일 09:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+# 웹훅이 연달아 와도 한 번에 하나씩 실행한다.
+concurrency:
+  group: ninehire-jobs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 공고 목록 생성
+        env:
+          NINEHIRE_API_KEY: ${{ secrets.NINEHIRE_API_KEY }}
+        run: python3 -B scripts/ninehire_jobs.py --write
+
+      - name: 변경 시 커밋·푸시
+        id: commit
+        run: |
+          if git diff --quiet -- recruit/index.html; then
+            echo "변경 없음"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 저장소 기여자 목록에 봇 계정이 추가되지 않도록 저장소 소유자 명의로 커밋한다.
+          git config user.name "hanjunho"
+          git config user.email "hanjunho@gmail.com"
+          git add recruit/index.html
+          git commit -m "Recruit 공고 목록 자동 갱신 (나인하이어)"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: GitHub Pages 재배포 요청
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "재배포 요청 실패: 푸시로 배포가 시작되었는지 확인"
