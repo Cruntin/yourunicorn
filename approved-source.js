@@ -9,13 +9,24 @@ const stableVH=()=>vhCache;
 // 모바일 터치: 고정 장면 구간에서는 스와이프 1회에 정지점 하나씩 이동한다(관성 한 번에 메시지·카드 여러 장이 지나가지 않게).
 // 각 구간은 register(getStops)로 문서 기준 scrollY 정지점 목록을 넘긴다. 첫 정지점 위·마지막 정지점 아래로는 네이티브 스크롤로 빠져나간다.
 // 이동은 거리와 무관하게 같은 길이의 감속 트윈이라, 카드 간격이 좁은 구간과 넓은 구간이 같은 박자로 한 장씩 들어온다.
+// 세게·길게 스와이프하면 손을 뗄 때의 속도만큼 여러 칸을 가되, 칸마다 HOLD 동안 멈춰 보여주고 다음 칸으로 넘어간다.
 const stepScroll=(()=>{
   const mq=matchMedia('(max-width:767px) and (hover:none) and (pointer:coarse)');
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const root=document.documentElement;
   const sources=[];
-  const DURATION=900,SETTLE=420,THRESHOLD=24;
-  let cache=null,tween=null,queued=0,touch=null,idle=0;
+  const DURATION=900,CHAIN=700,HOLD=380,SETTLE=420,THRESHOLD=24,MAX_STEPS=4;
+  let cache=null,tween=null,queue={dir:0,count:0},hold=0,touch=null,idle=0;
+  const clearChain=()=>{queue={dir:0,count:0};clearTimeout(hold);hold=0;};
+  // 손을 떼기 직전 속도(px/ms)로 이동할 칸 수를 정한다: 천천히 1칸, 빠를수록 최대 MAX_STEPS칸.
+  const stepsFor=speed=>Math.max(1,Math.min(MAX_STEPS,1+Math.floor((speed-.6)/.7)));
+  const enqueue=(dir,count)=>{if(count>=1){if(queue.dir!==dir)queue={dir,count:0};queue.count=Math.min(MAX_STEPS,queue.count+count);}pump();};
+  // 이동이 끝나 있으면 HOLD 만큼 보여준 뒤 예약된 다음 칸으로 간다.
+  const pump=()=>{
+    if(tween||hold||!queue.count||touch)return;
+    const dir=queue.dir;queue.count--;if(!queue.count)queue.dir=0;
+    hold=setTimeout(()=>{hold=0;step(dir,CHAIN,true);},HOLD);
+  };
   const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
   const enabled=()=>mq.matches&&!reduce.matches&&!document.querySelector('.site-header.menu-open');
   const stops=()=>cache||=sources.flatMap(get=>get()).filter(Number.isFinite).map(Math.round).sort((a,b)=>a-b);
@@ -38,17 +49,17 @@ const stepScroll=(()=>{
       scrollTo({top:tween.from+(tween.to-tween.from)*ease(t),behavior:'instant'});
       if(t<1){tween.raf=requestAnimationFrame(tick);return;}
       tween=null;sync();
-      if(queued){const dir=queued;queued=0;step(dir);}
+      pump();
     };
     sync();tween.raf=requestAnimationFrame(tick);
   };
-  // 진행 중인 이동과 같은 방향이면 하나만 예약하고, 반대 방향이면 지금 위치에서 바로 되돌아간다.
-  const step=dir=>{
-    if(tween&&Math.sign(tween.to-tween.from)===dir){queued=dir;return;}
-    queued=0;
+  // 진행 중인 이동과 같은 방향이면 다음 칸으로 예약하고, 반대 방향이면 남은 예약을 버리고 지금 위치에서 바로 되돌아간다.
+  const step=(dir,duration=DURATION,chained=false)=>{
+    if(tween&&Math.sign(tween.to-tween.from)===dir){enqueue(dir,1);return;}
+    if(!chained)clearChain();
     const list=stops(),y=scrollY;
     const index=dir>0?list.findIndex(v=>v>y+2):list.findLastIndex(v=>v<y-2);
-    if(index>=0)go(index,DURATION);
+    if(index>=0)go(index,duration);else clearChain();
   };
   const nearest=()=>{const list=stops(),y=scrollY;let best=-1;list.forEach((v,i)=>{if(best<0||Math.abs(v-y)<Math.abs(list[best]-y))best=i;});return best;};
   // 관성으로 구간 안에 들어와 멈추면 가장 가까운 정지점으로 짧게 맞춘다.
@@ -65,12 +76,14 @@ const stepScroll=(()=>{
     touch=null;
     if(event.touches.length!==1||!enabled()||event.target.closest?.('dialog, .mobile-menu, .job-filters, .benefit-tabs'))return;
     const point=event.touches[0];
-    touch={x:point.clientX,y:point.clientY,time:event.timeStamp,claimed:null,stepped:false};
+    touch={x:point.clientX,y:point.clientY,time:event.timeStamp,claimed:null,stepped:false,samples:[[event.timeStamp,point.clientY]]};
     clearTimeout(idle);
+    if(hold||queue.count)clearChain(); // 연속 이동 중 다시 손을 대면 남은 칸은 취소하고 사용자 조작을 따른다
   },{passive:true});
   addEventListener('touchmove',event=>{
     if(!touch||event.touches.length!==1)return;
     const point=event.touches[0],dx=point.clientX-touch.x,dy=point.clientY-touch.y;
+    touch.samples.push([event.timeStamp,point.clientY]);if(touch.samples.length>8)touch.samples.shift();
     if(touch.claimed===null){
       if(!dx&&!dy)return;
       if(Math.abs(dx)>Math.abs(dy)&&!tween){touch.claimed=false;return;} // 가로 제스처(카드 레일)는 관여하지 않음
@@ -84,9 +97,14 @@ const stepScroll=(()=>{
   const end=event=>{
     const current=touch;touch=null;
     if(!current?.claimed){scheduleSettle();return;}
-    if(current.stepped)return;
-    const point=event.changedTouches[0],dy=point?point.clientY-current.y:0,speed=Math.abs(dy)/Math.max(1,event.timeStamp-current.time);
-    if(dy&&speed>.3)step(dy<0?1:-1);else if(!tween)settle();
+    const point=event.changedTouches[0],dy=point?point.clientY-current.y:0,dir=dy<0?1:-1;
+    // 손을 떼기 직전 100ms 동안의 속도. 끝에서 멈췄다 떼면 느린 스와이프로 본다.
+    const recent=current.samples.filter(([time])=>event.timeStamp-time<=100);
+    const [t0,y0]=recent[0]||current.samples.at(-1)||[current.time,current.y];
+    const flick=point?Math.abs(point.clientY-y0)/Math.max(16,event.timeStamp-t0):0;
+    if(current.stepped){enqueue(dir,stepsFor(flick)-1);return;}
+    const speed=Math.abs(dy)/Math.max(1,event.timeStamp-current.time);
+    if(dy&&speed>.3){step(dir);enqueue(dir,stepsFor(Math.max(flick,speed))-1);}else if(!tween)settle();
   };
   addEventListener('touchend',end,{passive:true});addEventListener('touchcancel',end,{passive:true});
   addEventListener('resize',invalidate);mq.addEventListener?.('change',invalidate);reduce.addEventListener?.('change',invalidate);
