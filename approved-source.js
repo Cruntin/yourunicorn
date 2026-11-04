@@ -15,10 +15,8 @@ const stepScroll=(()=>{
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const root=document.documentElement;
   const sources=[];
-  const DURATION=900,CHAIN=700,HOLD=380,SETTLE=420,THRESHOLD=24,MAX_STEPS=4,AUTO_DELAY=1000;
-  const autoSources=[];
-  let cache=null,tween=null,queue={dir:0,count:0},hold=0,touch=null,idle=0,auto=0;
-  const clearAuto=()=>{clearTimeout(auto);auto=0;};
+  const DURATION=900,CHAIN=700,HOLD=380,SETTLE=420,THRESHOLD=24,MAX_STEPS=4;
+  let cache=null,tween=null,queue={dir:0,count:0},hold=0,touch=null,idle=0;
   const clearChain=()=>{queue={dir:0,count:0};clearTimeout(hold);hold=0;};
   // 손을 떼기 직전 속도(px/ms)로 이동할 칸 수를 정한다: 천천히 1칸, 빠를수록 최대 MAX_STEPS칸.
   const stepsFor=speed=>Math.max(1,Math.min(MAX_STEPS,1+Math.floor((speed-.6)/.7)));
@@ -40,29 +38,17 @@ const stepScroll=(()=>{
     const inside=list.length>1&&(tween||(scrollY>list[0]+1&&scrollY<list.at(-1)-1));
     root.style.touchAction=inside?'pan-x pinch-zoom':'';
   };
-  // 자동 진행 정지점(예: 메인 넷째 제품 카드)에 아래로 도착하면 AUTO_DELAY 만큼 보여준 뒤 스크롤 없이 다음 칸으로 간다.
-  // 위로 되돌아와 멈춘 경우와 관성 보정(settle)으로 도착한 경우는 다시 끌려가지 않도록 제외한다.
-  const scheduleAuto=y=>{
-    if(!enabled()||!autoSources.flatMap(get=>get()).some(v=>Math.abs(v-y)<=2))return;
-    auto=setTimeout(()=>{
-      auto=0;
-      if(touch||tween||hold||queue.count||!enabled())return;
-      const list=stops(),index=list.findIndex(v=>Math.abs(v-scrollY)<=2);
-      if(index>=0&&index<list.length-1)go(index+1,CHAIN);
-    },AUTO_DELAY);
-  };
-  const go=(index,duration,autoNext=false)=>{
+  const go=(index,duration)=>{
     const list=stops(),to=list[index],from=scrollY;
-    cancelAnimationFrame(tween?.raf||0);clearAuto();
+    cancelAnimationFrame(tween?.raf||0);
     if(to===undefined||Math.abs(to-from)<1){tween=null;sync();return;}
-    tween={index,from,to,start:performance.now(),duration,autoNext,raf:0};
+    tween={index,from,to,start:performance.now(),duration,raf:0};
     const tick=now=>{
       if(!tween)return;
       const t=Math.max(0,Math.min(1,(now-tween.start)/tween.duration));
       scrollTo({top:tween.from+(tween.to-tween.from)*ease(t),behavior:'instant'});
       if(t<1){tween.raf=requestAnimationFrame(tick);return;}
-      const done=tween;tween=null;sync();
-      if(done.autoNext&&!queue.count)scheduleAuto(done.to);
+      tween=null;sync();
       pump();
     };
     sync();tween.raf=requestAnimationFrame(tick);
@@ -73,7 +59,7 @@ const stepScroll=(()=>{
     if(!chained)clearChain();
     const list=stops(),y=scrollY;
     const index=dir>0?list.findIndex(v=>v>y+2):list.findLastIndex(v=>v<y-2);
-    if(index>=0)go(index,duration,dir>0);else clearChain();
+    if(index>=0)go(index,duration);else clearChain();
   };
   const nearest=()=>{const list=stops(),y=scrollY;let best=-1;list.forEach((v,i)=>{if(best<0||Math.abs(v-y)<Math.abs(list[best]-y))best=i;});return best;};
   // 관성으로 구간 안에 들어와 멈추면 가장 가까운 정지점으로 짧게 맞춘다.
@@ -91,7 +77,7 @@ const stepScroll=(()=>{
     if(event.touches.length!==1||!enabled()||event.target.closest?.('dialog, .mobile-menu, .job-filters, .benefit-tabs'))return;
     const point=event.touches[0];
     touch={x:point.clientX,y:point.clientY,time:event.timeStamp,claimed:null,stepped:false,samples:[[event.timeStamp,point.clientY]]};
-    clearTimeout(idle);clearAuto();
+    clearTimeout(idle);
     if(hold||queue.count)clearChain(); // 연속 이동 중 다시 손을 대면 남은 칸은 취소하고 사용자 조작을 따른다
   },{passive:true});
   addEventListener('touchmove',event=>{
@@ -124,7 +110,7 @@ const stepScroll=(()=>{
   addEventListener('resize',invalidate);mq.addEventListener?.('change',invalidate);reduce.addEventListener?.('change',invalidate);
   addEventListener('load',invalidate);document.fonts?.ready.then(invalidate);
   new ResizeObserver(invalidate).observe(document.body);
-  return {register(getStops){sources.push(getStops);invalidate();},autoNext(getStops){autoSources.push(getStops);},enabled,busy:()=>!!tween};
+  return {register(getStops){sources.push(getStops);invalidate();},enabled,busy:()=>!!tween};
 })();
 (() => {
   'use strict';
@@ -1251,13 +1237,10 @@ if(visionMask){
  const stop=()=>{drag=null;};carousel.addEventListener('pointerup',stop);carousel.addEventListener('pointercancel',stop);
  let queued=false;function request(){if(!queued){queued=true;requestAnimationFrame(now=>{queued=false;paint(now);});}};
  // 모바일 스텝 스크롤 정지점: 메시지·카드가 완전히 보이는 진행률을 paint()의 진행률 계산을 거꾸로 풀어 scrollY 로 바꾼다.
- // mask 진행률 p(=raw/.58): 첫 문장, 둘째 문장, (셋째 문장은 멈춤 구간 가운데), 제품 카드 1~4, 펼침
+ // mask 진행률 p(=raw/.58): 첫 문장, 둘째 문장, (셋째 문장은 멈춤 구간 가운데), 제품 카드 1~3, 펼침
  // 질문 장면 fp(멈춤 구간 없이 선형 진행률 .60+.40*fp — reimagine paint 기준): HOW IS IT DONE?, HOW SHOULD IT BE DONE?, MAKE IT 카드 1~3, 펼침+국문
- // 넷째 카드(크런틴)에 도착하면 1초 보여준 뒤 스크롤 없이 펼침으로 넘어간다(디자이너 요청).
- let autoSpreadY=NaN;
- stepScroll.autoNext(()=>[autoSpreadY]);
+ // 넷째 카드(크런틴)에서는 멈추지 않고 셋째 카드에서 한 번에 펼침까지 이어진다(디자이너 요청). 크런틴 도착은 이동 중에 지나간다.
  stepScroll.register(()=>{
-  autoSpreadY=NaN;
   if(mask.hidden||!mask.classList.contains('has-linked-flow')||mask.classList.contains('is-previous-spread'))return [];
   const top=parseFloat(getComputedStyle(stage).top)||0;
   const origin=mask.getBoundingClientRect().top+scrollY-top;
@@ -1265,11 +1248,10 @@ if(visionMask){
   const plateauPx=stableVH()*(innerWidth<768?.7:1.1);
   const baseTotal=Math.max(1,totalPx-plateauPx),r0=.58*.27,startPx=r0*baseTotal;
   const at=raw=>origin+(raw<r0?raw*baseTotal:raw*baseTotal+plateauPx);
-  autoSpreadY=Math.round(at(.737*.58));
   return [0,
    ...[.085,.21].map(p=>at(p*.58)),
    origin+startPx+plateauPx*.5,
-   ...[.46,.577,.657,.737,.80].map(p=>at(p*.58)),
+   ...[.46,.577,.657,.80].map(p=>at(p*.58)),
    ...[.14,.39,.585,.63,.675,.84].map(fp=>origin+(.60+.40*fp)*totalPx)];
  });
  addEventListener('scroll',request,{passive:true});addEventListener('resize',request);reduce.addEventListener('change',request);paint();
