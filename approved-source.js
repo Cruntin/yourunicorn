@@ -1163,7 +1163,7 @@ if(visionMask){
   if(mobileRail){
    productTitle.style.setProperty('--spread',spread.toFixed(4));
    const w=frame.offsetWidth,h=frame.offsetHeight,S=stage.clientHeight,th=productTitle.offsetHeight,gapY=40;
-   const kMax=Math.min(1.2,(innerWidth-40)/(w+48)); // 좌우 다음 카드가 20px 이상 보이게
+   const kMax=Math.min(1.1,(innerWidth-40)/(w+48)); // 펼침 카드 최대 1.1배(디자이너 요청으로 1.2→1.1), 좌우 다음 카드가 20px 이상 보이게
    const k1=Math.max(1,Math.min(kMax,(S-80-th-gapY)/h));
    const top1=Math.max(0,(S-(th+gapY+h*k1))/2);
    railScale=1+(k1-1)*spread;
