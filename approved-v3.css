@@ -877,8 +877,8 @@ html body.approved-culture #team .acc__body p.fx-fixed .fx-gap{display:block!imp
 @media(max-width:700px){
  html body.approved-recruit .art-hero__photo img{object-position:50% 0%!important}
 }
-/* 입사 축하금 띠: 누르면 설명이 띠 안에서 아래에서 위로 떠오르듯 나타남 (다른 요소는 그대로) */
-html body.approved-recruit #bonus .art-bonus__body>div{transform:translateY(14px);opacity:0;transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .35s ease}
+/* 입사 축하금 띠: 누르면 설명이 띠 안에서 제목 줄 아래로 내려오듯 나타남 (다른 요소는 그대로) */
+html body.approved-recruit #bonus .art-bonus__body>div{transform:translateY(-14px);opacity:0;transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .35s ease}
 html body.approved-recruit #bonus.is-open .art-bonus__body>div{transform:none;opacity:1;transition-delay:.08s}
 html body.approved-recruit #bonus .art-bonus__head{scroll-margin-top:120px}
 @media(prefers-reduced-motion:reduce){html body.approved-recruit #bonus .art-bonus__body>div{transition:none;transform:none;opacity:1}}
@@ -921,17 +921,14 @@ html body.approved-culture #talent .talent-profile__heading h2{font-weight:600!i
  html body.approved-recruit .art-hero__photo{aspect-ratio:auto!important;height:min(calc((100vw - 32px) * 1.045),560px)!important}
  html body.approved-recruit .art-hero__photo img{object-position:50% 30%!important}
 }
-/* 리크루트(모바일) 입사 축하금 띠: 화면 하단 고정(자리에 닿으면 안착) + 펼치면 레이아웃을 밀지 않고 위로 올라오는 패널 */
+/* 리크루트(모바일) 입사 축하금 띠: 화면 하단 고정(자리에 닿으면 안착). 설명은 PC처럼 제목 줄 아래로 열린다(11/5 요청: 위로 열리지 않게) */
 @media(max-width:700px){
  html body.approved-recruit #bonus.art-bonus{overflow:visible!important;position:relative;z-index:60}
  html body.approved-recruit #bonus.art-bonus.is-floating{position:fixed!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;margin:0!important;z-index:900!important}
- html body.approved-recruit #bonus .art-bonus__body{position:absolute!important;left:0;right:0;bottom:100%;background:#e52925;color:#fff;border-radius:10px 10px 0 0;box-shadow:0 -10px 24px rgba(0,0,0,.12)}
  html body.approved-recruit #bonus .art-bonus__body p{padding:22px 20px 18px!important}
- html body.approved-recruit #bonus.is-open .art-bonus__head{border-radius:0!important}
  html body.approved-recruit #bonus.is-open .art-bonus__arrow{transform:rotate(180deg)}
  html body.approved-recruit .art-bonus-slot{display:block}
 }
-@media(max-width:700px){html body.approved-recruit #bonus.art-bonus.is-open{border-radius:0!important}html body.approved-recruit #bonus.is-open .art-bonus__head{border-radius:0!important}}
 /* 리크루트 모바일: 헤더-타이틀 간격 축소(서브 텍스트가 첫 화면에 보이도록), 입사 축하금 본문 글자 약간 축소 */
 @media(max-width:700px){
  html body.approved-recruit .art-hero__inner{padding-top:108px!important;gap:20px!important}
