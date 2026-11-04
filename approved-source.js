@@ -1068,7 +1068,7 @@ if(visionMask){
   stage.style.setProperty('--unicorn-card-width',`${mask.querySelector('.unicorn-mask-frame').offsetWidth}px`);
  }
  sizeCards();addEventListener('resize',sizeCards);document.fonts.ready.then(sizeCards);
- let railScale=1, wasSpread=false, easedProgress=null, lastPaint=0, thirdProgress=0, thirdPassed=false, topTitleMode=false;
+ let railScale=1, spreadClock=null, wasSpread=false, easedProgress=null, lastPaint=0, thirdProgress=0, thirdPassed=false, topTitleMode=false;
  const third=mask.querySelector('.unicorn-mask-third');
  function paint(now=performance.now()){
   if(mask.hidden)return;
@@ -1133,7 +1133,15 @@ if(visionMask){
   }
   const change=reduce.matches?1:smooth((p-.275)/.035);
   const definitionExit=reduce.matches?1:smooth((p-.23)/.035);
-  const spread=reduce.matches?1:smooth((p-(innerWidth<768?.745:.70))/.045); // 모바일: 넷째 카드가 다 도착한 뒤 펼침(정지점 .737 → .80)
+  let spread=reduce.matches?1:smooth((p-.70)/.045);
+  // 모바일 펼침은 스크롤 위치를 따라가지 않는다(디자이너 요청): 넷째 카드가 다 도착한 지점(p .745)을 지나면 1초 동안 끝까지 펼쳐지고,
+  // 그 위로 되돌아가면 같은 방식으로 다시 접힌다. 스크롤 중간에 멈춰도 반쯤 펼쳐진 채 남지 않는다.
+  if(innerWidth<768&&!reduce.matches){
+   const goal=p>=.745?1:0;
+   if(spreadClock===null)spreadClock=goal;
+   else if(spreadClock!==goal){spreadClock=goal>spreadClock?Math.min(goal,spreadClock+dt/1000):Math.max(goal,spreadClock-dt/1000);if(spreadClock!==goal)request();}
+   spread=smooth(spreadClock);
+  }
   title.style.opacity=1-definitionExit;
   english.style.opacity=1-definitionExit;
   productTitle.classList.remove('is-top');
