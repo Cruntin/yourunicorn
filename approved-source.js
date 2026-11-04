@@ -1068,7 +1068,7 @@ if(visionMask){
   stage.style.setProperty('--unicorn-card-width',`${mask.querySelector('.unicorn-mask-frame').offsetWidth}px`);
  }
  sizeCards();addEventListener('resize',sizeCards);document.fonts.ready.then(sizeCards);
- let railScale=1, spreadClock=null, wasSpread=false, easedProgress=null, lastPaint=0, thirdProgress=0, thirdPassed=false, topTitleMode=false;
+ let railScale=1, spreadGoal=null, spreadFrom=0, spreadAt=0, spreadValue=0, wasSpread=false, easedProgress=null, lastPaint=0, thirdProgress=0, thirdPassed=false, topTitleMode=false;
  const third=mask.querySelector('.unicorn-mask-third');
  function paint(now=performance.now()){
   if(mask.hidden)return;
@@ -1134,52 +1134,63 @@ if(visionMask){
   const change=reduce.matches?1:smooth((p-.275)/.035);
   const definitionExit=reduce.matches?1:smooth((p-.23)/.035);
   let spread=reduce.matches?1:smooth((p-.70)/.045);
-  // 모바일 펼침은 스크롤 위치를 따라가지 않는다(디자이너 요청): 넷째 카드가 다 도착한 지점(p .745)을 지나면 0.55초 동안 끝까지 펼쳐지고,
-  // 그 위로 되돌아가면 같은 방식으로 다시 접힌다. 스크롤 중간에 멈춰도 반쯤 펼쳐진 채 남지 않는다.
+  // 모바일 펼침은 스크롤 위치를 따라가지 않는다(디자이너 요청): 넷째 카드가 다 도착한 지점(p .745)을 지나면 0.5초 동안 끝까지 펼쳐지고,
+  // 그 위로 되돌아가면 같은 방식으로 다시 접힌다. 시작이 빠르고 끝에서 감속(ease-out)해 즉시 반응하는 느낌을 준다.
+  // 시각 기준(performance.now)으로 진행해 프레임이 밀려도 길이가 늘어나지 않는다. 도중에 방향이 바뀌면 현재 위치에서 이어 간다.
   if(innerWidth<768&&!reduce.matches){
-   const goal=p>=.745?1:0;
-   if(spreadClock===null)spreadClock=goal;
-   else if(spreadClock!==goal){spreadClock=goal>spreadClock?Math.min(goal,spreadClock+dt/550):Math.max(goal,spreadClock-dt/550);if(spreadClock!==goal)request();}
-   spread=smooth(spreadClock);
+   const goal=p>=.745?1:0,t=performance.now();
+   if(spreadGoal===null){spreadGoal=spreadFrom=spreadValue=goal;spreadAt=-1e9;}
+   else if(goal!==spreadGoal){spreadFrom=spreadValue;spreadGoal=goal;spreadAt=t;}
+   const k=Math.min(1,(t-spreadAt)/(500*Math.max(.4,Math.abs(spreadGoal-spreadFrom))));
+   spreadValue=k>=1?spreadGoal:spreadFrom+(spreadGoal-spreadFrom)*(1-Math.pow(1-k,3));
+   if(k<1)request();
+   spread=spreadValue;
   }
   title.style.opacity=1-definitionExit;
   english.style.opacity=1-definitionExit;
   productTitle.classList.remove('is-top');
   productTitle.style.opacity=String(change*(1-railOut)); // 카드와 함께 사라짐(제목만 남는 빈 화면 방지)
-  productTitle.style.transform='none';
+  if(innerWidth>=768)productTitle.style.transform='none'; // 모바일은 아래 펼침 계산에서 정한다(매 프레임 none 으로 되돌렸다 다시 쓰지 않게)
   detail.style.opacity=String(change*(1-smooth((p-.66)/.05))*(1-handoff)); // 제품 설명(쌓인 카드 옆): 카드가 펼쳐지기 직전까지 표시
   first.style.opacity=reduce.matches?0:smooth(p/.07)*(1-smooth((p-.10)/.035));
   second.style.opacity=reduce.matches?0:smooth((p-.14)/.04)*(1-smooth((p-.24)/.04));
   if(third){const t=thirdProgress;third.style.opacity=reduce.matches?0:smooth(t/.18)*(1-smooth((t-.82)/.18));
    if(thirdPassed)second.style.opacity=String(+second.style.opacity*(1-smooth(t/.12)));}
   first.style.transform=second.style.transform='none';
-  carousel.style.top=`${frame.offsetTop}px`;
+  // 모바일 펼침(11/4 디자이너 시안): 넷째 카드(크런틴)는 제자리에 남고 나머지 카드가 그 뒤에서 좌우로 나온다.
+  // 펼칠수록 제목을 키우고 카드도 키워, 제목+카드 묶음을 화면 세로 가운데에 둔다(아래 검은 여백 축소).
+  // 프레임 드롭 방지: 펼치는 동안 글자 크기·top 처럼 레이아웃을 다시 계산하게 하는 값은 바꾸지 않고 transform 만 바꾼다.
+  // 제목은 글자 크기를 바꾸지 않고 두 줄을 2D transform(scale)으로 키운다. 제목 레이어 안에서 벡터로 다시 그려 흐려지지 않는다.
+  // 레이아웃 값은 쓰기 전에 한꺼번에 읽어, 한 프레임 안에서 레이아웃이 여러 번 강제 계산되지 않게 한다.
+  const mobileRail=innerWidth<768;
+  const fw=frame.offsetWidth,fh=frame.offsetHeight,frameTop=frame.offsetTop,frameLeft=frame.getBoundingClientRect().left;
   const stageLeft=stage.getBoundingClientRect().left;
-  const safeTitleRail=productTitle.getBoundingClientRect().right+24;
-  const railTarget=innerWidth<768?0:Math.max(Math.min(760,Math.max(300,innerWidth*.355)),safeTitleRail);
+  const railTarget=mobileRail?0:Math.max(Math.min(760,Math.max(300,innerWidth*.355)),productTitle.getBoundingClientRect().right+24);
   const railStart=railTarget*spread;
   carousel.style.left=`${railStart-stageLeft}px`;
   carousel.style.width=`${Math.max(0,innerWidth-railStart)}px`;
-  carousel.style.setProperty('--unfold-origin',`${frame.getBoundingClientRect().left*(1-spread)}px`);
-  carousel.style.transform='none';
-  carousel.style.setProperty('--project-width',`${frame.offsetWidth}px`);
+  carousel.style.top=`${frameTop}px`;
+  carousel.style.setProperty('--project-width',`${fw}px`);
   carousel.style.setProperty('--project-gap','24px');
-  // 모바일 펼침(11/4 디자이너 시안): 넷째 카드(크런틴)는 제자리에 남고 나머지 카드가 그 뒤에서 좌우로 나온다.
-  // 펼칠수록 제목을 키우고(CSS --spread) 카드도 키워, 제목+카드 묶음을 화면 세로 가운데에 둔다(아래 검은 여백 축소).
-  const mobileRail=innerWidth<768;
   railScale=1;
   if(mobileRail){
-   productTitle.style.setProperty('--spread',spread.toFixed(4));
-   const w=frame.offsetWidth,h=frame.offsetHeight,S=stage.clientHeight,th=productTitle.offsetHeight,gapY=40;
-   const kMax=Math.min(1.1,(innerWidth-40)/(w+48)); // 펼침 카드 최대 1.1배(디자이너 요청으로 1.2→1.1), 좌우 다음 카드가 20px 이상 보이게
-   const k1=Math.max(1,Math.min(kMax,(S-80-th-gapY)/h));
-   const top1=Math.max(0,(S-(th+gapY+h*k1))/2);
+   const [line1,line2]=productTitle.children,H1=line1.offsetHeight,H2=line2.offsetHeight,S=stage.clientHeight,titleTop=productTitle.offsetTop,gapY=40;
+   const r1=1+2/12*spread,r2=1+8/24*spread; // 12→14px, 24→32px(디자이너 지정). 기본 글자 크기는 approved-v3.css
+   const th=productTitle.offsetHeight+H1*(r1-1)+H2*(r2-1);
+   const kMax=Math.min(1.1,(innerWidth-40)/(fw+48)); // 펼침 카드 최대 1.1배(디자이너 요청으로 1.2→1.1), 좌우 다음 카드가 20px 이상 보이게
+   const k1=Math.max(1,Math.min(kMax,(S-80-th-gapY)/fh));
+   const top1=Math.max(0,(S-(th+gapY+fh*k1))/2);
    railScale=1+(k1-1)*spread;
-   productTitle.style.transform=`translateY(${((top1-productTitle.offsetTop)*spread).toFixed(2)}px)`;
-   carousel.style.top=`${frame.offsetTop+(top1+th+gapY-frame.offsetTop)*spread}px`;
+   line1.style.transform=r1===1?'':`scale(${r1.toFixed(4)})`;
+   line2.style.transform=r2===1?'':`translateY(${(H1*(r1-1)).toFixed(2)}px) scale(${r2.toFixed(4)})`; // 3D 변환이면 줄이 따로 합성돼 확대 시 흐려진다
+   productTitle.style.transform=spread?`translate3d(0,${((top1-titleTop)*spread).toFixed(2)}px,0)`:'none';
    carousel.style.transformOrigin='50% 0';
-   carousel.style.transform=`scale(${railScale.toFixed(4)})`;
-   carousel.style.setProperty('--unfold-origin',`${frame.getBoundingClientRect().left-3*(w+24)}px`); // 크런틴(레일 8번째)을 쌓인 자리에 고정
+   carousel.style.transform=`translate3d(0,${((top1+th+gapY-frameTop)*spread).toFixed(2)}px,0) scale(${railScale.toFixed(4)})`;
+   carousel.style.setProperty('--unfold-origin',`${frameLeft-3*(fw+24)}px`); // 크런틴(레일 8번째)을 쌓인 자리에 고정
+  }else{
+   for(const line of productTitle.children)line.style.transform='';
+   carousel.style.setProperty('--unfold-origin',`${frameLeft*(1-spread)}px`);
+   carousel.style.transform='none';
   }
   carousel.style.opacity=1-railOut; // 카드 레일은 계속 보이고 제목 영역을 비운 오른쪽으로 펼쳐진다
   carousel.style.pointerEvents=spread===1&&handoff<.6?'auto':'none'; // 3차: 카드가 보이는 동안은 호버(뒤집기) 가능
@@ -1192,8 +1203,8 @@ if(visionMask){
   const firstIntro=1-Math.pow(1-firstIntroRaw,3.2);
   cards.forEach((card,i)=>{
    if(mobileRail&&(i<4||i>7)){ // 모바일: 오른쪽 반복 카드도 크런틴 뒤에서 오른쪽으로 펼쳐진다
-    card.style.opacity=String(smooth(spread/.3));card.style.filter='';
-    card.style.transform=i>7&&spread<1?`translate3d(${-(i-7)*(frame.offsetWidth+24)*(1-spread)}px,0,0)`:'';return;
+    card.style.opacity=String(Math.max(p>.6?.002:0,smooth(spread/.3))); // 펼침 직전부터 거의 투명하게 미리 그려 둬, 처음 나타나는 프레임이 끊기지 않게card.style.filter='';
+    card.style.transform=i>7&&spread<1?`translate3d(${-(i-7)*(fw+24)*(1-spread)}px,0,0)`:'';return;
    }
    if(i<4||i>7){card.style.opacity=spread===1?'1':'0';card.style.transform='';card.style.filter='';return;} // 반복 세트는 레일이 오른쪽에 고정된 뒤에만 표시해 왼쪽 제목 영역을 비운다
    // preview: first card rises while the third line fades out (no blank gap), with a long decelerating glide
@@ -1201,7 +1212,7 @@ if(visionMask){
    const arrival=reduce.matches?1:lead?firstIntro:smooth((p-(.42+j*.08))/arriveSpan);
    const covered=j<2?smooth((p-(.42+(j+1)*.08))/arriveSpan):0;
    const rise=lead?Math.min(340,stableVH()*.42):Math.min(180,stableVH()*.22);
-   card.style.transform=`translate3d(${(mobileRail?3-j:-j)*(frame.offsetWidth+24)*(1-spread)}px,${(1-arrival)*rise-covered*12*(1-spread)}px,0) rotate(${[-1.5,1,-1,1.5][j]*(1-spread)*(lead?arrival:1)}deg) scale(${1-(1-arrival)*(lead?.08:.06)-covered*.035*(1-spread)})`;
+   card.style.transform=`translate3d(${(mobileRail?3-j:-j)*(fw+24)*(1-spread)}px,${(1-arrival)*rise-covered*12*(1-spread)}px,0) rotate(${[-1.5,1,-1,1.5][j]*(1-spread)*(lead?arrival:1)}deg) scale(${1-(1-arrival)*(lead?.08:.06)-covered*.035*(1-spread)})`;
    card.style.opacity=lead?smooth(firstIntroRaw/.45):smooth(arrival/.25);
    if(lead)card.style.filter=arrival<.999&&window.innerWidth>=768?`blur(${(5*(1-arrival)).toFixed(2)}px)`:''; // 모바일은 블러 생략(떨림·끊김 방지)
    card.style.zIndex=String(j+1);

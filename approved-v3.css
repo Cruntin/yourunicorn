@@ -1003,11 +1003,12 @@ html body.approved-company .product-face-back h3{font-size:min(clamp(22px,2.3vw,
 /* 메인 영상: 아이폰이 자동재생을 막을 때 뜨는 기본 재생(▶) 버튼을 숨겨 '일시정지'처럼 보이지 않게(그 사이엔 첫 장면 이미지가 보임) */
 html body .hero-film-fallback{pointer-events:none}
 html body .hero-film-fallback::-webkit-media-controls,html body .hero-film-fallback::-webkit-media-controls-panel,html body .hero-film-fallback::-webkit-media-controls-start-playback-button,html body .hero-film-fallback::-webkit-media-controls-overlay-play-button{display:none!important;-webkit-appearance:none!important;opacity:0!important}
-/* 메인 모바일 WE CALL THEM / UNICORN PRODUCTS (11/4 디자이너 시안): 쌓인 카드 단계는 UNICORN PRODUCTS 24px(WE CALL THEM 12px 유지),
-   펼침 단계로 갈수록 14px·32px로 키운다(디자이너 요청으로 16px·38px에서 축소). --spread(0→1)는 approved-source.js가 펼침 진행률로 갱신한다. */
+/* 메인 모바일 WE CALL THEM / UNICORN PRODUCTS (11/4 디자이너 시안): 쌓인 카드 단계는 UNICORN PRODUCTS 24px(WE CALL THEM 12px 유지).
+   펼침 단계의 14px·32px는 approved-source.js가 두 줄을 transform 으로 키워 만든다(글자 크기를 매 프레임 바꾸면 아이폰에서 프레임 드롭). */
 @media(max-width:767px){
- html body.approved-page.approved-company .unicorn-mask-stage .unicorn-stack-title>span:first-child{font-size:calc(12px + 2px * var(--spread,0))!important}
- html body.approved-page.approved-company .unicorn-mask-stage .unicorn-stack-title>span+span{font-size:calc(24px + 8px * var(--spread,0))!important}
+ html body.approved-page.approved-company .unicorn-mask-stage .unicorn-stack-title>span:first-child{font-size:12px!important}
+ html body.approved-page.approved-company .unicorn-mask-stage .unicorn-stack-title>span+span{font-size:24px!important}
+ html body.approved-page.approved-company .unicorn-mask-stage .unicorn-stack-title>span{transform-origin:50% 0}
 }
 /* Safari: 기울어진 카드의 윗변이 계단처럼 보이는 문제. 투명 외곽선으로 합성 레이어 경계를 1px 넓혀 가장자리를 안티앨리어싱해서 그리게 한다.
    상품 카드는 앞·뒷면(.product-face)이 따로 레이어로 그려지므로 면에도 준다. */
