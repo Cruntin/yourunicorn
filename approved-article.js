@@ -108,6 +108,7 @@
 
   // 왼쪽 카드 묶음 (Culture): 카드가 차례로 아래에서 올라와 기준선(anchor)에 윗선을 맞추고,
   //   다음 카드가 올라오면 목록이 그만큼 위로 밀리며 앞 카드는 옅게 남음 · 설명은 차례로 펼쳐졌다 접힘
+  const cardStacks = [];
   function makeCardStack(scrollEl, anchor, CARD_T) {
     const stage = scrollEl.querySelector(".cx-stage");
     const box = scrollEl.querySelector(".cx-cards");
@@ -130,7 +131,8 @@
     const paint = (p) => {
       if (!cards.length) return;
       // Short viewports use the complete reading layout defined in approved.css.
-      if (document.body.classList.contains('approved-culture') && innerHeight <= 700) return;
+      // 모바일은 화면이 낮아도 PC처럼 스크롤 연동. 펼친 카드가 무대에 안 들어가는 낮은 폰(cx-flow)만 한 흐름 목록
+      if (document.body.classList.contains('approved-culture') && ((innerHeight <= 700 && innerWidth > 700) || document.body.classList.contains('cx-flow'))) return;
       const T = (i) => CARD_T[i] || CARD_T[CARD_T.length - 1];
       const ks = cards.map((c, i) => seg(p, T(i).rise));
       cards.forEach((c, i) => {
@@ -152,7 +154,16 @@
         c.el.style.opacity = Math.max(0, 1 - fadeK * (ks[i + 1] || 0) - 0.25 * (ks[i + 2] || 0)).toFixed(3);   // 한 칸 밀리면 옅게, 두 칸 밀리면 더 옅게
       });
     };
-    return { measure, paint };
+    // 모바일: 가장 긴 카드를 펼쳤을 때 고정 무대(100svh - 헤더) 아래로 넘치는지
+    const overflows = () => {
+      if (!box || !cards.length) return false;
+      measure();
+      const tallest = Math.max(...cards.map((c) => c.el.offsetHeight - c.more.offsetHeight + c.more.firstElementChild.offsetHeight + 12));
+      return (parseFloat(box.style.top) || 0) + tallest + 8 > stage.clientHeight;
+    };
+    const stack = { measure, paint, overflows };
+    cardStacks.push(stack);
+    return stack;
   }
 
   // AND WE MAKE IT REAL · WHO WE LOOK FOR: 제목은 고정, 왼쪽 카드가 차례로 (기준선 = 위 한글 한 줄 윗선)
@@ -299,6 +310,34 @@
     window.addEventListener("resize", () => { measure(); measureCard(); paint(pos); paintCard(pShown); onScroll(); });
     document.fonts?.ready.then(() => { measure(); measureCard(); paint(pos); paintCard(pShown); });
     measure(); measureCard(); paint(0); paintCard(0); onScroll();
+  }
+
+  // 모바일 Culture: 펼친 카드가 고정 무대에 다 들어가지 않는 낮은 폰(아이폰 SE·mini 등)만 한 흐름 목록(cx-flow)으로 둔다.
+  //   무대 높이가 100svh 기준이라 툴바가 접히고 펴져도 판정은 그대로 — 폭이 바뀔 때만 다시 잰다.
+  //   흐름 목록에서는 카드 설명이 화면에 들어올 때 펼쳐진다.
+  if (document.body.classList.contains("approved-culture") && cardStacks.length) {
+    const flowCards = [...document.querySelectorAll(".cx-scroll:not(.cx-scroll--who) .cx-card")];
+    let flowObserver = null, fitWidth = -1;
+    const fitCheck = () => {
+      if (innerWidth === fitWidth) return;
+      fitWidth = innerWidth;
+      const was = document.body.classList.contains("cx-flow");
+      document.body.classList.remove("cx-flow");
+      const flow = innerWidth <= 700 && cardStacks.some((s) => s.overflows());
+      document.body.classList.toggle("cx-flow", flow);
+      flowObserver?.disconnect(); flowObserver = null;
+      if (flow && "IntersectionObserver" in window) {
+        flowObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-mobile-expanded"); flowObserver.unobserve(entry.target);
+        }), { rootMargin: "0px 0px -120px 0px", threshold: 0 });
+        flowCards.forEach((card) => { if (!card.classList.contains("is-mobile-expanded")) flowObserver.observe(card); });
+      }
+      if (flow !== was) dispatchEvent(new Event("resize"));   // 배치가 바뀌었으니 각 구간 위치를 다시 잼
+    };
+    window.addEventListener("resize", fitCheck);
+    document.fonts?.ready.then(() => { fitWidth = -1; fitCheck(); });
+    fitCheck();
   }
 
   // 스파크: 화면에 들어오면 중앙에서 퍼지는 모션 재생 (다시 들어오면 처음부터)

@@ -778,6 +778,9 @@ body.approved-recruit{overflow-x:clip;overflow-y:visible}
 /* Keep all copy reachable in landscape and other short viewports. */
 @media(max-height:700px){
  .approved-company .unicorn-mask-stage{min-height:0;top:88px;height:calc(100svh - 88px)}
+}
+/* 컬처 짧은 화면 정적 레이아웃은 노트북 짧은 창에만 — 모바일은 화면이 낮아도 PC처럼 스크롤 연동(11/5 요청) */
+@media(max-height:700px) and (min-width:701px){
  .approved-culture .cx-scroll{height:auto!important;min-height:0!important;padding-block:var(--section-gap);background:#fff!important;color:#111!important}
  .approved-culture .cx-stage{position:relative!important;top:auto!important;height:auto!important;min-height:0;overflow:visible;display:grid;gap:32px}
  .approved-culture .cx-actor,.approved-culture .cx-lay--a,.approved-culture .cx-hint{display:none!important}
@@ -792,9 +795,6 @@ body.approved-recruit{overflow-x:clip;overflow-y:visible}
  .approved-culture .cx-card__more>div{transform:none!important;opacity:1!important;will-change:auto}
  .approved-culture .cx-card__more p{font-size:16px;line-height:1.7}
  .approved-culture .talent-profile__heading{position:static}
-}
-@media(max-height:700px) and (max-width:600px){
- .approved-culture .cx-cards{grid-template-columns:minmax(0,1fr)}
 }
 @media(max-height:700px) and (min-width:701px){
  .approved-company .unicorn-mask-stage{--unicorn-card-height:50svh!important;--unicorn-card-width:32svh!important;--sequence-title-size:clamp(26px,7svh,44px)}

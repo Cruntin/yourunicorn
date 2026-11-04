@@ -69,27 +69,6 @@ document.querySelectorAll('a.ext[href="#"]').forEach(a=>{a.setAttribute('aria-di
   });
 })();
 
-// 모바일 Culture: 설명 카드는 읽기 흐름 안에서 스크롤 진입 시 부드럽게 펼친다.
-(()=>{
- const init=()=>{
-  const cards=[...document.querySelectorAll('body.approved-culture .cx-scroll:not(.cx-scroll--who) .cx-card')];
-  if(!cards.length||!('IntersectionObserver' in window))return;
-  const mobile=matchMedia('(max-width:700px)');
-  let observer=null;
-  const observe=()=>{
-   observer?.disconnect();observer=null;
-   if(!mobile.matches)return;
-   observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
-    if(!entry.isIntersecting)return;
-    entry.target.classList.add('is-mobile-expanded');observer.unobserve(entry.target);
-   }),{rootMargin:'0px 0px -120px 0px',threshold:0});
-   cards.forEach(card=>{if(!card.classList.contains('is-mobile-expanded'))observer.observe(card);});
-  };
-  observe();
-  if(mobile.addEventListener)mobile.addEventListener('change',observe);else mobile.addListener(observe);
- };
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-})();
 
 // 리크루트(모바일) 입사 축하금 띠: 원래 자리가 화면 아래에 있으면 화면 하단에 붙어 보이고, 스크롤해서 자리에 닿으면 그 자리에 안착
 (()=>{

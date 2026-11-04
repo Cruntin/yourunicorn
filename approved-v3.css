@@ -858,24 +858,24 @@ html body.approved-culture #team .acc__body p.fx-fixed .fx-gap{display:block!imp
  html body .approved-header .approved-menu-toggle:focus:not(:focus-visible){outline:none}
  html body .approved-header.is-menu-open .approved-menu-toggle__close{display:flex!important;align-items:center;justify-content:center;width:100%;height:100%;font-size:20px;line-height:1;transform:translateY(-1px)}
 }
-/* 모바일 Culture: 본문은 한 흐름으로 읽히게 두고, 카드 설명은 스크롤에 들어올 때 펼친다. */
-@media(max-width:700px){
- html body.approved-culture .cx-scroll{position:relative!important;height:auto!important;min-height:0!important;margin:0!important;overflow:visible!important;padding-block:var(--section-gap)!important}
- html body.approved-culture .cx-stage{position:relative!important;top:auto!important;height:auto!important;min-height:0!important;overflow:visible!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:24px!important}
- html body.approved-culture .cx-actor,html body.approved-culture .cx-lay--a,html body.approved-culture .cx-hint{display:none!important}
- html body.approved-culture .cx-lay--b{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:0!important;padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;opacity:1!important;visibility:visible!important;transform:none!important;order:0}
- html body.approved-culture .cx-lay--b .cx-fade-b{opacity:1!important;transform:none!important}
- html body.approved-culture .cx-lay [data-slot]{visibility:visible!important}
- html body.approved-culture .cx-cards{position:relative!important;inset:auto!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;width:100%!important;height:auto!important;transform:none!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:start!important;gap:12px!important;order:1}
- html body.approved-culture .cx-card{position:relative!important;width:100%!important;min-width:0!important;transform:none!important;opacity:1!important}
- html body.approved-culture .cx-card__more{display:grid!important;grid-template-rows:0fr!important;height:auto!important;opacity:1!important;overflow:hidden!important;transition:grid-template-rows .65s cubic-bezier(.22,1,.36,1)!important}
- html body.approved-culture .cx-card__more>div{min-height:0!important;margin-top:0!important;padding:0!important;overflow:hidden!important;opacity:0!important;transform:translateY(-10px) scaleY(.98)!important;transition:transform .5s cubic-bezier(.22,1,.36,1),opacity .3s ease,margin .5s ease,padding .5s ease!important}
- html body.approved-culture .cx-card.is-mobile-expanded .cx-card__more{grid-template-rows:1fr!important}
- html body.approved-culture .cx-card.is-mobile-expanded .cx-card__more>div{margin-top:12px!important;padding:20px!important;opacity:1!important;transform:none!important}
-}
 /* Recruit mobile: anchor the crop at the photo's top so the person's face stays in frame. */
 @media(max-width:700px){
  html body.approved-recruit .art-hero__photo img{object-position:50% 0%!important}
+}
+/* 모바일 Culture: 펼친 카드가 고정 무대에 다 들어가지 않는 낮은 화면(아이폰 SE·mini 등)만 한 흐름 목록으로 두고, 카드 설명은 스크롤에 들어올 때 펼친다(cx-flow는 approved-article.js가 판정) */
+@media(max-width:700px){
+ html body.approved-culture.cx-flow .cx-scroll{position:relative!important;height:auto!important;min-height:0!important;margin:0!important;overflow:visible!important;padding-block:var(--section-gap)!important}
+ html body.approved-culture.cx-flow .cx-stage{position:relative!important;top:auto!important;height:auto!important;min-height:0!important;overflow:visible!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:24px!important}
+ html body.approved-culture.cx-flow .cx-actor,html body.approved-culture.cx-flow .cx-lay--a,html body.approved-culture.cx-flow .cx-hint{display:none!important}
+ html body.approved-culture.cx-flow .cx-lay--b{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:0!important;padding:0!important;align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;opacity:1!important;visibility:visible!important;transform:none!important;order:0}
+ html body.approved-culture.cx-flow .cx-lay--b .cx-fade-b{opacity:1!important;transform:none!important}
+ html body.approved-culture.cx-flow .cx-lay [data-slot]{visibility:visible!important}
+ html body.approved-culture.cx-flow .cx-cards{position:relative!important;inset:auto!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;width:100%!important;height:auto!important;transform:none!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:start!important;gap:12px!important;order:1}
+ html body.approved-culture.cx-flow .cx-card{position:relative!important;width:100%!important;min-width:0!important;transform:none!important;opacity:1!important}
+ html body.approved-culture.cx-flow .cx-card__more{display:grid!important;grid-template-rows:0fr!important;height:auto!important;opacity:1!important;overflow:hidden!important;transition:grid-template-rows .65s cubic-bezier(.22,1,.36,1)!important}
+ html body.approved-culture.cx-flow .cx-card__more>div{min-height:0!important;margin-top:0!important;padding:0!important;overflow:hidden!important;opacity:0!important;transform:translateY(-10px) scaleY(.98)!important;transition:transform .5s cubic-bezier(.22,1,.36,1),opacity .3s ease,margin .5s ease,padding .5s ease!important}
+ html body.approved-culture.cx-flow .cx-card.is-mobile-expanded .cx-card__more{grid-template-rows:1fr!important}
+ html body.approved-culture.cx-flow .cx-card.is-mobile-expanded .cx-card__more>div{margin-top:12px!important;padding:20px!important;opacity:1!important;transform:none!important}
 }
 /* 입사 축하금 띠: 누르면 설명이 띠 안에서 제목 줄 아래로 내려오듯 나타남 (다른 요소는 그대로) */
 html body.approved-recruit #bonus .art-bonus__body>div{transform:translateY(-14px);opacity:0;transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .35s ease}
