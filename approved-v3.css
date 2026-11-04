@@ -977,8 +977,12 @@ html body.approved-company .product-face-back h3{font-size:min(clamp(22px,2.3vw,
  html body .approved-header.is-menu-open .approved-menu-toggle__close{font-size:17px!important}
  html body .approved-header.is-menu-open nav{padding-top:84px!important}
  html body .approved-header.is-menu-open nav::before{top:80px!important}
+ /* 헤더 뒤 흰 띠(body::before, 기존 76px)를 헤더 높이에 맞춤 — 그대로 두면 헤더 아래로 20px 흰 공백이 보임 */
+ html body::before{height:56px!important}
  /* 메인 */
  html:root{scroll-padding-top:46px}
+ /* OUR VISION: 문장을 헤더 아래 보이는 검정 영역의 세로 가운데에 고정 */
+ html body.approved-company .pb-statement--darken .g12{top:56px!important;height:calc(100svh - 56px)!important;min-height:0!important}
  html body.approved-company .unicorn-mask-stage{top:56px!important;height:calc(100svh - 56px)!important}
  html body.approved-company .global-cities-section{--global-pin-top:44px}
  /* 컬처·채용 */
