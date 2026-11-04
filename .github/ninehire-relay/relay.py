@@ -58,7 +58,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         # 기본 로그는 요청 줄 전체(토큰 포함)를 남기므로 경로만 기록한다.
-        log(f"{self.client_address[0]} {self.command} {urlsplit(self.path).path} -> {args[1] if len(args) > 1 else ''}")
+        # 요청 줄을 해석하지 못한 잘못된 요청은 path·command 가 없으므로 기본값으로 남긴다.
+        path = urlsplit(getattr(self, "path", "") or "").path
+        log(f"{self.client_address[0]} {getattr(self, 'command', None) or '-'} {path} -> {args[1] if len(args) > 1 else ''}")
 
     def reply(self, status, message):
         body = json.dumps({"message": message}).encode()
@@ -69,9 +71,16 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
-        if urlsplit(self.path).path == "/health":
+        # 웹훅 등록 시 주소가 살아 있는지 GET/HEAD 로 확인하는 경우가 있어 웹훅 경로도 200으로 답한다(아무 동작 없음).
+        if urlsplit(self.path).path in ("/health", PATH):
             return self.reply(200, "ok")
         self.reply(404, "not found")
+
+    def do_HEAD(self):
+        found = urlsplit(self.path).path in ("/health", PATH)
+        self.send_response(200 if found else 404)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     def do_POST(self):
         url = urlsplit(self.path)
