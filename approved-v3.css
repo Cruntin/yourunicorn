@@ -1005,3 +1005,5 @@ html body .hero-film-fallback::-webkit-media-controls,html body .hero-film-fallb
  html body.approved-page.approved-company .unicorn-mask-stage .unicorn-stack-title>span:first-child{font-size:calc(12px + 4px * var(--spread,0))!important}
  html body.approved-page.approved-company .unicorn-mask-stage .unicorn-stack-title>span+span{font-size:calc(24px + 14px * var(--spread,0))!important}
 }
+/* Safari: 기울어진 카드의 윗변이 계단처럼 보이는 문제. 투명 외곽선으로 합성 레이어 경계를 1px 넓혀 가장자리를 안티앨리어싱해서 그리게 한다. */
+html body.approved-company .reimagine-flow-cards .reimagine-keyword,html body.approved-company .unicorn-unfold-carousel .product-project{outline:1px solid transparent}
