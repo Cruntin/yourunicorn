@@ -28,9 +28,9 @@ EMPLOYMENT = {
     "full_time": "정규직", "intern": "인턴", "contractor": "계약직", "part_time": "파트타임",
     "freelancer": "프리랜서", "dispatched": "파견직", "day_labor": "일용직", "trainee": "수습",
 }
-# 나인하이어에 직군(jobGroup)이 비어 있는 공고는 제목 앞 [태그]로 직군을 정한다.
+# 나인하이어에 직군(jobGroup)이 비어 있는 공고는 제목 앞 [태그]로 직군을 정한다. 값은 나인하이어 직군 이름과 같게 둔다.
 PREFIX_GROUP = {
-    "Channel": "채널관리", "Design": "디자인", "Marketing": "마케팅", "Global": "마케팅",
+    "Channel": "Channel", "Design": "Design", "Marketing": "Marketing", "Global": "Global",
     "SCM": "SCM", "Finance": "Business", "AI·Data": "Business",
 }
 TITLE_RE = re.compile(r"^\s*\[([^\]]+)\]\s*(.*?)\s*$")
