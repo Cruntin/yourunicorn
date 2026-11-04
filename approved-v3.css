@@ -734,7 +734,7 @@ html body.approved-culture #benefits{position:relative}
 @media(min-width:1001px){html body.approved-culture #benefits .art-chips{top:107px}}
 /* 채용(데스크톱): 섹션 제목(Open Positions·FAQ)을 컬처처럼 왼쪽 열에 두고 스크롤 시 스티키 — 제목은 흐름에서 높이를 차지하지 않게(음수 하단 마진) 내용과 같은 윗선에서 시작 */
 @media(min-width:1001px){
- html body.approved-recruit .art-body>.art-sec>.approved-section-title{position:sticky!important;top:119px!important;z-index:5;line-height:1.1!important;margin-bottom:-1.1em!important;overflow:visible}
+ html body.approved-recruit .art-body>.art-sec>.approved-section-title{position:sticky!important;top:119px!important;z-index:5;line-height:1.1!important;margin-bottom:-1.1em!important;overflow:visible;pointer-events:none}
  html body.approved-recruit .art-body>#faq>.approved-section-title{margin-left:calc(100% - var(--page-content-width))!important}
 }
 /* ---------- QA 보정 ---------- */
