@@ -865,7 +865,7 @@ if(visionMask){
   const insetX=0;
   const filmHeight=filmH(Math.max(1,stage.clientWidth-insetX*2));
   stage.style.height=`${Math.ceil(Math.max(rows.scrollHeight,filmHeight))}px`;
-  const travel=Math.max(1,stableVH()*(innerWidth<=700?.6:1.5)-stage.offsetHeight)*.8; // 3차: 데스크톱도 고정 구간 축소(2.3→1.5) → 영상 카드 아래 빈 공간이 길게 보이지 않게 // 3차: 모바일은 고정 구간을 짧게 → 영상 카드와 CTA 사이 빈 간격 최소화 // 3차: 모바일은 하단 여백이 너무 커서 이동 거리 축소
+  const travel=Math.max(innerWidth<=700?stableVH()*.22:1,stableVH()*(innerWidth<=700?.6:1.5)-stage.offsetHeight)*.8; // 모바일: 도시 줄이 화면을 채워 스테이지가 커져도 영상 확대에 쓸 스크롤 거리는 남긴다 // 3차: 데스크톱도 고정 구간 축소(2.3→1.5) → 영상 카드 아래 빈 공간이 길게 보이지 않게 // 3차: 모바일은 고정 구간을 짧게 → 영상 카드와 CTA 사이 빈 간격 최소화 // 3차: 모바일은 하단 여백이 너무 커서 이동 거리 축소
   section.style.height=`${stage.offsetHeight+travel}px`;
  }
  function update(){
@@ -1068,7 +1068,7 @@ if(visionMask){
   stage.style.setProperty('--unicorn-card-width',`${mask.querySelector('.unicorn-mask-frame').offsetWidth}px`);
  }
  sizeCards();addEventListener('resize',sizeCards);document.fonts.ready.then(sizeCards);
- let railScale=1, spreadGoal=null, spreadFrom=0, spreadAt=0, spreadValue=0, wasSpread=false, easedProgress=null, lastPaint=0, thirdProgress=0, thirdPassed=false, topTitleMode=false;
+ let railScale=1, spreadGoal=null, spreadFrom=0, spreadAt=0, spreadValue=0, wasSpread=false, collapsedAt=-1e9, easedProgress=null, lastPaint=0, thirdProgress=0, thirdPassed=false, topTitleMode=false;
  const third=mask.querySelector('.unicorn-mask-third');
  function paint(now=performance.now()){
   if(mask.hidden)return;
@@ -1143,8 +1143,10 @@ if(visionMask){
    if(spreadGoal===null){spreadGoal=spreadFrom=spreadValue=goal;spreadAt=-1e9;}
    else if(goal!==spreadGoal){spreadFrom=spreadValue;spreadGoal=goal;spreadAt=t;}
    const k=Math.min(1,(t-spreadAt)/((mobile?500:600)*Math.max(.4,Math.abs(spreadGoal-spreadFrom))));
+   const before=spreadValue;
    spreadValue=k>=1?spreadGoal:spreadFrom+(spreadGoal-spreadFrom)*(1-Math.pow(1-k,3));
    if(k<1)request();
+   if(before>0&&spreadValue===0)collapsedAt=t; // 접힘이 끝난 시각 — 크런틴은 이때부터 내려간다
    spread=spreadValue;
   }
   title.style.opacity=1-definitionExit;
@@ -1200,7 +1202,10 @@ if(visionMask){
   carousel.style.pointerEvents=spread===1&&handoff<.6?'auto':'none'; // 3차: 카드가 보이는 동안은 호버(뒤집기) 가능
   carousel.dataset.unfolding=String(spread<1);
   carousel.classList.toggle('is-spread',spread===1);
-  if(spread<1&&wasSpread)setRailOffset(0);
+  // 펼친 뒤 넘어가기 전에 레일이 스크롤을 따라 카드 3장만큼 훑고 지나간다(디자이너 요청). 모바일은 훑기가 끝난 지점에 정지점이 있다.
+  railSweep=reduce.matches?0:smooth((p-.80)/.115)*3*(fw+24);
+  if(spread===0)railOffset=0;
+  applyRail(spread);
   wasSpread=spread===1;
   const arriveSpan=innerWidth<768?.075:.1; // 모바일: 다음 카드가 출발하기 전에 이전 카드 도착을 끝내 정지점마다 카드·설명이 온전히 보이게
   const firstIntroRaw=clamp((p-.28)/.14); // 3차: 제목이 뜨는 순간 첫 카드도 올라오기 시작 — 제목만 덩그러니 남는 빈 화면 제거
@@ -1213,7 +1218,9 @@ if(visionMask){
    }
    // preview: first card rises while the third line fades out (no blank gap), with a long decelerating glide
    const j=i-4,lead=j===0&&plateauPx>0;
-   const arrival=reduce.matches?1:lead?firstIntro:smooth((p-(.42+j*.08))/arriveSpan);
+   let arrival=reduce.matches?1:lead?firstIntro:smooth((p-(.42+j*.08))/arriveSpan);
+   // 되돌아갈 때 크런틴은 다른 카드가 모두 뒤로 모일 때까지 제자리에 있다가 내려간다(펼친 카드와 함께 사라지지 않게).
+   if(j===3&&!reduce.matches&&p>.6){const hold=spread>0?1:1-smooth((now-collapsedAt)/380);if(hold>0&&hold<1)request();arrival=Math.max(arrival,hold);}
    const covered=j<2?smooth((p-(.42+(j+1)*.08))/arriveSpan):0;
    const rise=lead?Math.min(340,stableVH()*.42):Math.min(180,stableVH()*.22);
    card.style.transform=`translate3d(${(3-j)*(fw+24)*(1-spread)}px,${(1-arrival)*rise-covered*12*(1-spread)}px,0) rotate(${[-1.5,1,-1,1.5][j]*(1-spread)*(lead?arrival:1)}deg) scale(${1-(1-arrival)*(lead?.08:.06)-covered*.035*(1-spread)})`;
@@ -1228,14 +1235,23 @@ if(visionMask){
   const media=document.querySelector('.shared-opening-film');
   if(media)media.style.opacity=1-smooth((p-.30)/.05);
  }
- let railOffset=0;
+ let railOffset=0,railSweep=0;
  const railCycle=()=>{const w=parseFloat(carousel.style.getPropertyValue('--project-width'))||0,g=parseFloat(carousel.style.getPropertyValue('--project-gap'))||0;return (w+g)*cards.length/3;};
- function setRailOffset(value){
+ // mix: 1 = 펼친 레일 위치, 0 = 쌓인 자리. 접히는 동안 흐른 거리를 mix 비율로 되돌려 카드가 튀지 않게 한다.
+ function applyRail(mix=1){
   const track=carousel.querySelector('.product-carousel-track');
   const cycle=railCycle();
-  railOffset=cycle?((value%cycle)+cycle)%cycle:0; // 3차: 한 세트 길이로 순환 → 끝없이 이어짐
-  if(railOffset>0)railOffset-=cycle; // 왼쪽으로 흐르므로 (-한 세트, 0] 범위를 써서 오른쪽 끝 카드가 비지 않게
-  track.style.translate=`${-railOffset}px 0`;
+  let shift=-(railOffset+railSweep); // 트랙을 오른쪽으로 민 거리. 흐를수록(railOffset 증가) 카드가 왼쪽으로 간다
+  if(cycle){
+   shift=((shift%cycle)+cycle)%cycle; // 3차: 한 세트 길이로 순환 → 끝없이 이어짐. [0, 한 세트) 범위를 써서 오른쪽 끝 카드가 비지 않게
+   if(mix<1&&shift>cycle/2)shift-=cycle; // 접힐 때는 같은 모양 중 제자리에 가까운 쪽에서 출발
+  }
+  track.style.translate=`${(shift*mix).toFixed(2)}px 0`;
+ }
+ function setRailOffset(value){
+  const cycle=railCycle();
+  railOffset=cycle?((value%cycle)+cycle)%cycle:0;
+  applyRail(1);
  }
  // 펼쳐진 상태에서 자동으로 오른쪽으로 흐르며, 드래그/호버 중에는 멈춘다.
  let railHover=false,railLast=0;
@@ -1261,7 +1277,8 @@ if(visionMask){
  let queued=false;function request(){if(!queued){queued=true;requestAnimationFrame(now=>{queued=false;paint(now);});}};
  // 모바일 스텝 스크롤 정지점: 메시지·카드가 완전히 보이는 진행률을 paint()의 진행률 계산을 거꾸로 풀어 scrollY 로 바꾼다.
  // mask 진행률 p(=raw/.58): 첫 문장, 둘째 문장, (셋째 문장은 멈춤 구간 가운데), 제품 카드 1~3, 펼침
- // 질문 장면 fp(멈춤 구간 없이 선형 진행률 .60+.40*fp — reimagine paint 기준): HOW IS IT DONE?, HOW SHOULD IT BE DONE?, MAKE IT 카드 1~3, 펼침+국문
+ // 펼침 다음 정지점(p .92)은 레일이 카드 3장만큼 훑고 지나간 뒤, 카드가 사라지기 직전이다.
+ // 질문 장면 fp(멈춤 구간 없이 선형 진행률 .60+.40*fp — reimagine paint 기준): HOW IS IT DONE?, HOW SHOULD IT BE DONE?, MAKE IT 첫 카드, 셋째 카드(둘째·셋째는 한 번에), 펼침+국문
  // 넷째 카드(크런틴)에서는 멈추지 않고 셋째 카드에서 한 번에 펼침까지 이어진다(디자이너 요청). 크런틴 도착은 이동 중에 지나간다.
  stepScroll.register(()=>{
   if(mask.hidden||!mask.classList.contains('has-linked-flow')||mask.classList.contains('is-previous-spread'))return [];
@@ -1274,8 +1291,8 @@ if(visionMask){
   return [0,
    ...[.085,.21].map(p=>at(p*.58)),
    origin+startPx+plateauPx*.5,
-   ...[.46,.577,.657,.80].map(p=>at(p*.58)),
-   ...[.14,.39,.585,.63,.675,.84].map(fp=>origin+(.60+.40*fp)*totalPx)];
+   ...[.46,.577,.657,.80,.92].map(p=>at(p*.58)),
+   ...[.14,.39,.585,.675,.84].map(fp=>origin+(.60+.40*fp)*totalPx)];
  });
  addEventListener('scroll',request,{passive:true});addEventListener('resize',request);reduce.addEventListener('change',request);paint();
 })();
@@ -1340,7 +1357,7 @@ sentence.style.transform=keep;}
   const gap=cards[0].offsetWidth+Math.max(14,Math.min(36,innerWidth*.02)); // preview: tighter MAKE IT spacing (was 24..60, 3.3vw)
   const items=[...cards.map((card,i)=>({card,slot:i-1,index:i})),...repeated];
   items.forEach(({card,slot:initial,index})=>{
-   const arrival=index===undefined?ease((p-.74)/.08):innerWidth<768?ease((p-(.54+index*.045))/.045):ease((p-(.42+index*.045))/.08); // 모바일: 질문 문구가 사라진 뒤 카드가 한 장씩 겹치지 않게 도착(스텝 정지점 .585/.63/.675)
+   const arrival=index===undefined?ease((p-.74)/.08):innerWidth<768?ease((p-(.54+index*.045))/.045):ease((p-(.42+index*.045))/.08); // 모바일: 질문 문구가 사라진 뒤 카드가 한 장씩 겹치지 않게 도착(스텝 정지점 .585/.675 — 둘째(UNEXPECTED)에서 멈추지 않고 셋째(FUN)까지 이어 온다)
    const slot=rolling?((initial-turn+11005.5)%11)-5.5:initial;
    card.style.opacity=arrival;
    card.style.transform=`translateX(${slot*gap*spread}px) translateY(${80*(1-arrival)}px) rotate(${index===undefined?0:[0,3,-3][index]*arrival*(1-spread)}deg)`;

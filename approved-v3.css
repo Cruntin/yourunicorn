@@ -1010,3 +1010,9 @@ html body .hero-film-fallback::-webkit-media-controls,html body .hero-film-fallb
 /* Safari: 기울어진 카드의 윗변이 계단처럼 보이는 문제. 투명 외곽선으로 합성 레이어 경계를 1px 넓혀 가장자리를 안티앨리어싱해서 그리게 한다.
    상품 카드는 앞·뒷면(.product-face)이 따로 레이어로 그려지므로 면에도 준다. */
 html body.approved-company .reimagine-flow-cards .reimagine-keyword,html body.approved-company .unicorn-unfold-carousel .product-project,html body.approved-company .unicorn-unfold-carousel .product-face{outline:1px solid transparent}
+/* 글로벌 도시(모바일): 고정된 제목 아래 도시 줄 3개가 화면 아래까지 채우도록 줄 높이·간격을 화면 높이에 맞춘다. 도시 이름은 60.8→72px. */
+@media(max-width:700px){
+ html body.approved-company .city-film-rows{--city-rows-h:calc(100svh - var(--global-pin-top,44px) - var(--global-heading-height,136px) - 28px);--city-type:72px;--city-height:clamp(80px,calc((var(--city-rows-h) - 96px) / 3),124px);min-height:var(--city-rows-h);justify-content:space-evenly;gap:18px}
+ html body.approved-company .city-film{width:calc(var(--city-height) * 1.7)!important;height:var(--city-height)!important}
+ html body.approved-company .city-film-set>span{font-size:var(--city-type)!important}
+}
