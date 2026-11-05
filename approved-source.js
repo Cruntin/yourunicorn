@@ -1352,13 +1352,14 @@ sentence.style.transform=keep;}
   categories.style.opacity=caption;right.style.opacity=caption*(1-spread);right.style.display=caption*(1-spread)<.02?'none':'';right.style.transform='none';korean.style.opacity=caption; // 3차: 오른쪽 캡션은 숨겨지면 레이아웃에서도 빠져 가운데 정렬
   const rolling=p>.82&&bounds.bottom>top+sticky.offsetHeight*.65;
   if(rolling){const now=performance.now();if(lastTick)turnAcc+=Math.min(50,now-lastTick)/6000;lastTick=now;} // 회전 속도 완화(슬롯당 6s), 탭 복귀 시 점프 방지(프레임 간격 50ms 상한)
-  else{lastTick=0;if(p<.74)turnAcc=0;} // 멈추면 그 자리에 고정, 카드가 사라진 뒤에만 초기화
-  const turn=turnAcc;
+  else{lastTick=0;if(p<.68)turnAcc=0;} // 멈추면 그 자리에 고정, 카드가 다 모인 뒤에만 초기화(되돌아갈 때 흐른 자리에서 그대로 모여 튀지 않게)
+  // 펼친 뒤 섹션을 떠나기 전에 레일이 스크롤을 따라 카드 3장만큼 훑고 지나간다(유니콘 프로덕트와 같은 방식, 디자이너 요청).
+  const turn=turnAcc+3*ease((p-.84)/.14);
   const gap=cards[0].offsetWidth+Math.max(14,Math.min(36,innerWidth*.02)); // preview: tighter MAKE IT spacing (was 24..60, 3.3vw)
   const items=[...cards.map((card,i)=>({card,slot:i-1,index:i})),...repeated];
   items.forEach(({card,slot:initial,index})=>{
    const arrival=index===undefined?ease((p-.74)/.08):innerWidth<768?ease((p-(.54+index*.045))/.045):ease((p-(.42+index*.045))/.08); // 모바일: 질문 문구가 사라진 뒤 카드가 한 장씩 겹치지 않게 도착(스텝 정지점 .585/.675 — 둘째(UNEXPECTED)에서 멈추지 않고 셋째(FUN)까지 이어 온다)
-   const slot=rolling?((initial-turn+11005.5)%11)-5.5:initial;
+   const slot=((initial-turn+11005.5)%11)-5.5;
    card.style.opacity=arrival;
    card.style.transform=`translateX(${slot*gap*spread}px) translateY(${80*(1-arrival)}px) rotate(${index===undefined?0:[0,3,-3][index]*arrival*(1-spread)}deg)`;
   });
