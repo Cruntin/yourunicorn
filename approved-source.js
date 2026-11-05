@@ -1202,8 +1202,9 @@ if(visionMask){
   carousel.style.pointerEvents=spread===1&&handoff<.6?'auto':'none'; // 3차: 카드가 보이는 동안은 호버(뒤집기) 가능
   carousel.dataset.unfolding=String(spread<1);
   carousel.classList.toggle('is-spread',spread===1);
-  // 펼친 뒤 넘어가기 전에 레일이 스크롤을 따라 카드 3장만큼 훑고 지나간다(디자이너 요청). 모바일은 훑기가 끝난 지점에 정지점이 있다.
-  railSweep=reduce.matches?0:smooth((p-.80)/.115)*3*(fw+24);
+  // 펼친 뒤 레일이 스크롤을 따라 훑으며 다음 장면(WE DON'T ASK)으로 넘어간다(디자이너 요청). 훑기는 카드가 사라지는 지점(p≈.983)까지 멈추지 않고 이어지고,
+  // 처음만 천천히 출발한 뒤 같은 속도로 흐르며 사라진다. 모바일은 펼침(.80)에서 한 번 스와이프하면 훑기·사라짐·다음 장면까지 이어서 간다.
+  {const q=clamp((p-.80)/.183),a=.35;railSweep=reduce.matches?0:(q<a?q*q/(2*a):q-a/2)/(1-a/2)*3*(fw+24);}
   if(spread===0)railOffset=0;
   applyRail(spread);
   wasSpread=spread===1;
@@ -1277,7 +1278,7 @@ if(visionMask){
  let queued=false;function request(){if(!queued){queued=true;requestAnimationFrame(now=>{queued=false;paint(now);});}};
  // 모바일 스텝 스크롤 정지점: 메시지·카드가 완전히 보이는 진행률을 paint()의 진행률 계산을 거꾸로 풀어 scrollY 로 바꾼다.
  // mask 진행률 p(=raw/.58): 첫 문장, 둘째 문장, (셋째 문장은 멈춤 구간 가운데), 제품 카드 1~3, 펼침
- // 펼침 다음 정지점(p .92)은 레일이 카드 3장만큼 훑고 지나간 뒤, 카드가 사라지기 직전이다.
+ // 펼침 다음에는 정지점을 두지 않는다: 한 번 스와이프하면 레일이 훑으며 사라지고 바로 HOW IS IT DONE? 으로 이어진다.
  // 질문 장면 fp(멈춤 구간 없이 선형 진행률 .60+.40*fp — reimagine paint 기준): HOW IS IT DONE?, HOW SHOULD IT BE DONE?, MAKE IT 첫 카드, 셋째 카드(둘째·셋째는 한 번에), 펼침+국문
  // 넷째 카드(크런틴)에서는 멈추지 않고 셋째 카드에서 한 번에 펼침까지 이어진다(디자이너 요청). 크런틴 도착은 이동 중에 지나간다.
  stepScroll.register(()=>{
@@ -1291,7 +1292,7 @@ if(visionMask){
   return [0,
    ...[.085,.21].map(p=>at(p*.58)),
    origin+startPx+plateauPx*.5,
-   ...[.46,.577,.657,.80,.92].map(p=>at(p*.58)),
+   ...[.46,.577,.657,.80].map(p=>at(p*.58)),
    ...[.14,.39,.585,.675,.84].map(fp=>origin+(.60+.40*fp)*totalPx)];
  });
  addEventListener('scroll',request,{passive:true});addEventListener('resize',request);reduce.addEventListener('change',request);paint();
