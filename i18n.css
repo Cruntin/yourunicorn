@@ -1,0 +1,132 @@
+/* 언어 선택 — 모든 페이지 공통. 예전 헤더의 'KR' 표시 자리에 들어감 */
+
+/* PC 헤더: 지구본 + 현재 언어 코드만 보이고, 누르면 언어 이름 목록이 펼쳐짐 */
+.approved-header .approved-lang--pick{position:relative;margin:0 0 0 4px}
+.approved-header .approved-lang--pick summary{display:flex;align-items:center;gap:6px;list-style:none;cursor:pointer;font:500 14px/1 Helvetica,Arial,sans-serif;color:#111;padding:8px 4px;border-radius:6px;user-select:none}
+.approved-header .approved-lang--pick summary::-webkit-details-marker{display:none}
+.approved-lang__globe,.approved-lang__chev{flex:none;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.approved-lang__globe{width:17px;height:17px;stroke-width:1.6}
+.approved-lang__chev{width:11px;height:11px;stroke-width:1.6;transition:transform .2s ease}
+.approved-header .approved-lang--pick[open] .approved-lang__chev{transform:rotate(180deg)}
+.approved-header .approved-lang--pick summary:focus-visible{outline:2px solid #111;outline-offset:2px}
+.approved-lang__list{position:absolute;right:-6px;top:calc(100% + 8px);min-width:64px;padding:5px;background:#fff;border:1px solid #e8e8e8;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:3px;z-index:10010}
+/* 글자 모양은 헤더의 현재 언어 표시(summary)와 같게 */
+.approved-lang__list a{display:block;padding:10px 14px;white-space:nowrap;border-radius:7px;font:500 14px/1 Helvetica,Arial,sans-serif;color:#a3a3a3;text-decoration:none;text-align:left}
+.approved-lang__list a:hover{background:#f4f4f4;color:#111}
+.approved-lang__list a[aria-current]{color:#111;background:#f4f4f4}
+
+/* 모바일 메뉴용 한 줄 목록은 PC에서는 숨김 */
+.approved-header nav .approved-lang--menu{display:none!important}
+
+@media(max-width:700px){
+ /* 모바일: 헤더에는 숨기고, 메뉴를 펼쳤을 때 메뉴 맨 아래에 표시 */
+ html body .approved-header>.approved-lang{display:none!important}
+ /* 회색 블록(헤더 메뉴 바와 같은 색, 내용 폭만큼) 안에 지구본 + KR EN JP, 현재 언어는 흰 칸 */
+ html body .approved-header.is-menu-open nav .approved-lang--menu{display:inline-flex!important;width:max-content;max-width:100%;align-self:flex-start;align-items:center;gap:2px;margin:28px 0 0;padding:4px!important;border:0;border-radius:10px;background:#f1f1f1!important}
+ html body .approved-header.is-menu-open nav .approved-lang--menu .approved-lang__globe{width:20px;height:20px;margin:0 6px 0 10px;color:#111}
+ html body .approved-header.is-menu-open nav .approved-lang--menu a{font-size:16px!important;font-weight:500!important;color:#a3a3a3!important;padding:10px 14px!important;margin:0!important;min-height:0!important;border-radius:7px;background:none!important}
+ html body .approved-header.is-menu-open nav .approved-lang--menu a[aria-current]{color:#111!important;background:#fff!important}
+}
+
+/* 일본어: 한국어용 단어 단위 줄바꿈(keep-all)을 풀어야 띄어쓰기 없는 문장이 화면 안에서 줄바꿈됨.
+   line-break:strict 로 句読点(、。)·작은 가나가 줄 맨 앞에 오지 않게 */
+html:lang(ja) body,html:lang(ja) body *{word-break:keep-all!important;overflow-wrap:break-word;line-break:strict}
+/* 일본어 줄바꿈: 페이지에 넣은 <wbr>(BudouX 구절 경계)에서만 줄이 바뀌고, 그래도 넘치면 아무 데서나 끊김(overflow-wrap).
+   스크립트가 글자를 다시 쓰는 타이핑 문구는 <wbr>이 없어 예전처럼 글자 단위로 */
+html:lang(ja) body .culture-typed{word-break:normal!important}
+
+/* 영어: 제목·줄 단위 문구는 줄 길이를 고르게, 본문은 마지막 줄에 단어 하나만 남지 않게 (지원 안 하는 브라우저는 기존과 같음).
+   일본어는 위 구절 줄바꿈으로 충분하고, balance 를 같이 쓰면 줄을 일부러 짧게 나눠 PC 제목이 6줄이 되므로 쓰지 않음 */
+/* text-wrap(줄임 속성)를 쓰면 '한 줄 고정'(white-space:nowrap)까지 풀려 버림 → 줄 나누는 방식만 바꾸는 text-wrap-style 사용(2026-11-12 수정).
+   전에는 컬처 'HOW WE WORK' 제목 자리가 두 줄이 되어 글자가 작아지고 아래 문구와 간격이 벌어졌음 */
+html:lang(en) body :is(h1,h2,h3,h4,figcaption,.feedback-line,.cascade-description p,.vis-title + p){text-wrap-style:balance}
+html:lang(en) body p{text-wrap-style:pretty}
+/* 한국어 페이지와 영문이 똑같은 제목은 한국어 페이지와 같은 모양 유지 */
+html:lang(en) body :is(.pb-next__title,.vis-title,.unicorn-mask-title,.cx-card__title,.cx-screen__title,.section-title.gallery-question){text-wrap-style:auto}
+html:lang(en) body .growth-cascade-card h3{text-wrap-style:auto}
+
+/* 영어: 'What is a unicorn' 카드 안 문구가 한국어보다 길어 한 줄 고정이면 카드 밖으로 잘림 → 줄바꿈 허용 + 조금 작게 */
+html:lang(en) body .unicorn-mask-copy :is(.unicorn-mask-first,.unicorn-mask-second,.unicorn-mask-third){white-space:normal;text-wrap:balance;font-size:min(clamp(16px,1.75vw,24px),8.1cqi)!important;line-height:1.22!important}
+
+/* 일본어 컬처 제목(U-01-01, 고객사 확인: 한국어처럼 3줄): 가나·한자는 한글보다 글자 폭이 넓어 PC에서 줄이 넘치므로 PC만 조금 작게 */
+/* PC 배치는 901px 부터 시작. 전에는 1024px 부터만 줄여서 901~1023px 창에서 6줄로 쪼개졌음(2026-11-12 수정) */
+@media (min-width:901px){html:lang(ja) body .art-hero h1{font-size:calc(var(--t-h1) * .8)}}
+@media (max-width:359px){html:lang(ja) body.approved-page .art-hero h1{font-size:calc(var(--m-h1) * .86)!important}}
+
+/* 영어 행간(:not(#_i18n)은 기존 모바일 규칙이 id 선택자를 써서 그보다 우선하게 하려는 것): 한국어와 같은 행간이면 영문은 글자 키(소문자)가 낮아 줄 사이가 더 비어 보임 → 한국어 화면과 나란히 놓고 눈으로 맞춘 값.
+   본문 */
+html:lang(en):not(#_i18n) body :is(.fx-line,.fx-fixed,.cx-card p,.cx-fixed,.art-hero__intro,.job__desc,.lead,.pb-ko,.company-hero-ko,.cx-screen__ko,.acc__panel p,.talent-detail p){line-height:1.48!important}
+@media (min-width:1024px){html:lang(en):not(#_i18n) body :is(.approved-team-intro .lead,.benefits-section .lead,.lead .fx-line,.lead){line-height:1.36!important}}
+/* 작은 설명 글 */
+html:lang(en):not(#_i18n) body :is(.feedback-line,.product-face-back p,.retail-collection__photos figcaption span){line-height:1.26!important}
+html:lang(en):not(#_i18n) body .cascade-description p{line-height:1.28!important}
+/* 제목(대소문자 섞인 것) */
+html:lang(en):not(#_i18n) body .art-hero h1{line-height:1.06!important}
+html:lang(en):not(#_i18n) body .reimagine-flow-korean{line-height:1.1!important}
+html:lang(en):not(#_i18n) body .global-cities-intro h2{line-height:1.15!important}
+html:lang(en):not(#_i18n) body .art-next__content strong{line-height:1.2!important}
+html:lang(en):not(#_i18n) body .unicorn-mask-copy :is(.unicorn-mask-first,.unicorn-mask-second,.unicorn-mask-third){line-height:1.12!important}
+@media (max-width:1023px){html:lang(en):not(#_i18n) body.approved-page .cx-card .cx-card__title{line-height:1.18!important}}
+/* 대문자 제목은 한국어와 글자 키가 비슷해 조금만 */
+html:lang(en):not(#_i18n) body .growth-tags-heading h2{line-height:1.2!important}
+/* QA 2차(2026-11-11) */
+/* JP: 스크립트가 폭에 맞춰 글자 크기를 줄이는 제목은 단어 중간 줄바꿈을 허용하면 안 줄어들고 'PRODUCT/S'처럼 끊김 */
+html:lang(ja) body .unicorn-stack-title,html:lang(ja) body .unicorn-stack-title *{overflow-wrap:normal}
+/* 마지막 줄에 한두 글자만 남지 않게 줄 길이를 고르게 */
+html:lang(ja) body :is(.feedback-line,.talent-summary){text-wrap:balance}
+html:lang(en) body .art-next__content strong{text-wrap:balance}
+/* EN·JP 모바일 제품 설명: 시트의 줄 구분(" / ")대로 줄마다 따로. 한국어는 짧아 한 줄에 이어 쓰지만 영어·일본어는 길어서 문장 중간에서 끊겼음 */
+@media (max-width:767px){html:is(:lang(en),:lang(ja)):not(#_i18n) body .unicorn-stack-description .feedback-line{display:block!important}}
+/* 1차 수정(2026-11-12): EN 대문자로 바뀐 도시 섹션 제목(C-10-02). 모바일에서는 시트 줄 구분대로면 줄마다 다시 꺾여 4줄('WORLD.'만 한 줄)이 되므로 줄 구분을 풀고 고르게 3줄 */
+@media (max-width:767px){html:lang(en):not(#_i18n) body #global-cities-heading br{display:none}html:lang(en):not(#_i18n) body #global-cities-heading{text-wrap:balance}}
+/* 1차 수정(2026-11-12): EN 대문자로 바뀐 'HOW SHOULD IT BE DONE' 아래 문구(C-04-05). 폰에서는 26px 이면 5줄('BEEN DONE,' 'SCRATCH.' 만 한 줄)이 되므로 화면 폭에 맞춰 조금 줄여 3줄(시트 첫 줄 2줄 + 둘째 줄 1줄) */
+@media (max-width:767px){html:lang(en):not(#_i18n) body .reimagine-flow-korean{font-size:min(26px,5.7vw)!important;text-wrap:balance}}
+/* 같은 문구, 태블릿·PC: 대문자 첫 줄이 상자 폭에 거의 꽉 차(1440에서 여유 2px) 글꼴이 조금만 달라도 'BEEN DONE,' 이 밀려 내려가므로 6%쯤 여유를 둠. 밀리더라도 줄 길이는 고르게 */
+html:lang(en):not(#_i18n) body .reimagine-flow-korean{text-wrap:balance}
+@media (min-width:768px){html:lang(en):not(#_i18n) body .reimagine-flow-korean{font-size:min(var(--ko-size,48px),3vw)!important}}
+/* 태블릿 폭(701~1000px) 컬처 '일하는 방식' 카드 구간 — KR·EN·JP 공통(운영 사이트 한국어에도 있는 문제, 2026-11-12)
+   approved-v3.css 의 태블릿 배치(제목 위, 카드 아래로 쌓기)에서 빠져 있던 것 보완:
+   ① 첫 묶음 제목(HOW WE WORK / WE IMAGINE WHAT SHOULD EXIST)과 설명이 숨겨진 채 남아 빈칸으로 보임 → 보이게
+   ② 두 번째 묶음(AND WE MAKE IT REAL)이 첫 묶음 카드에 바로 붙음 → 간격 */
+@media (min-width:701px) and (max-width:1000px){
+html body.approved-culture .cx-lay--b [data-slot]{visibility:visible!important}
+html body.approved-culture .cx-lay--b .cx-fade-b{opacity:1!important;transform:none!important}
+html body.approved-culture .cx-scroll--real{margin-top:72px!important}
+}
+/* ③ 이 폭에서는 카드가 한 흐름으로 쌓여 있는데 설명만 스크롤에 따라 열렸다 닫혀 아래 내용이 출렁임 → 설명을 항상 펼쳐 둠
+   (창 높이 700px 이하일 때 쓰는 기존 배치 approved.css 783행과 같은 처리. 되돌리려면 아래 블록만 지우면 됨) */
+@media (min-width:701px) and (max-width:1000px){
+html body.approved-culture .cx-card__more{height:auto!important;perspective:none!important}
+html body.approved-culture .cx-card__more>div{transform:none!important;opacity:1!important}
+}
+/* 일본어: 한 줄 고정인 제목 안에서는 구절 줄바꿈용 <wbr> 이 고정을 무시하고 끊음 → 그 안의 <wbr> 은 끔.
+   (컬처 '私たちの働き方': 자리가 두 줄이 되면 움직이는 글자의 크기·위치 계산이 틀어짐. 2026-11-12) */
+html:lang(ja) body :is(.cx-intro__title,.cx-intro__sub,.cx-screen__label,.cx-screen__title,.cx-real__title,.cx-actor) wbr{display:none}
+/* 일본어 컬처 '일하는 방식' 첫 화면(私たちの働き方)을 둘째 화면·한국어와 같은 글자감·간격으로 (2026-11-12)
+   ① 움직이는 글자(.cx-actor--how): 일본어 글꼴은 줄 상자가 높아 글자가 자리보다 아래로 내려앉음 → 영문과 같은 줄 높이로 고정
+   ② 한자·가나는 칸을 꽉 채워 같은 크기라도 영문 대문자보다 커 보임 → 0.88배(PC), 모바일 28px (처음엔 영문 대문자 높이와 같은 0.82배·26px 였고, 고객 요청으로 조금 키움 2026-11-13). 왼쪽 칸 밖으로도 안 넘침 */
+html:lang(ja) body .cx-actor--how{line-height:1.15!important}
+/* (크기는 맨 아래 '세 가지 글자 스타일' 규칙으로 대체 — 2026-11-13) */
+/* ③ 한자·가나는 글자 위아래 여백이 적어 같은 여백 값이면 더 붙어 보임 → 실제 글자 사이 간격이 한국어와 같아지게(PC 23·24px, 모바일 18·21px) */
+@media (min-width:1001px){html:lang(ja):not(#_i18n) body.approved-culture .cx-intro__q{margin-bottom:17px!important}html:lang(ja):not(#_i18n) body.approved-culture .cx-intro__sub{margin-top:16px!important}}
+@media (max-width:700px){html:lang(ja):not(#_i18n) body.approved-culture .cx-intro__q{margin-bottom:12px!important}html:lang(ja):not(#_i18n) body.approved-culture .cx-intro__sub{margin-top:15px!important}}
+/* 컬처 '일하는 방식' 둘째 화면: 큰 제목(…EXIST)과 아래 설명 사이 간격을 조금 줄임 — KR·EN·JP 모두, PC (요청 2026-11-13. 한국어는 같은 날 추가 요청). 글자 사이 실제 간격 34px → 26px */
+@media (min-width:1001px){html:not(#_i18n) body.approved-culture .cx-screen__ko{margin-top:12px!important}}
+/* 컬처 '일하는 방식' 첫 화면·둘째 화면의 글자 스타일 세 가지를 같게 — EN·JP (고객 요청 2026-11-13)
+   · 검정 작은 글자(첫 화면 WE IMAGINE… / 둘째 화면 HOW WE WORK·私たちの働き方): 원래 같음(보이는 크기 15.6px 굵게)
+   · 검정 큰 글자: 첫 화면 제목이 48px, 둘째 화면 제목이 44px 로 달랐음 → 첫 화면을 둘째 화면 크기로(min(3.6vw,60px)). 일본어도 같은 크기
+   · 회색 작은 글자(첫 화면 질문 / 둘째 화면 설명): 굵기가 400·500 으로 달랐음 → 둘 다 400, 줄 높이도 같게 */
+@media (min-width:1001px){
+html:is(:lang(en),:lang(ja)):not(#_i18n) body.approved-culture .cx-intro__title{font-size:min(3.6vw,60px)!important;line-height:1!important}
+html:is(:lang(en),:lang(ja)):not(#_i18n) body.approved-culture :is(.cx-intro__q,.cx-screen__ko){font-size:17px!important;font-weight:400!important;letter-spacing:-.01em!important;color:#5c6168!important}
+html:lang(en):not(#_i18n) body.approved-culture .cx-intro__q{line-height:1.48!important}
+}
+/* 컬처 '일하는 방식' 둘째 화면의 작은 라벨(HOW WE WORK·私たちの働き方)이 일반 해상도(1배) 모니터에서 뭉개져 보임 — KR·EN·JP (고객 제보 2026-11-13)
+   원인: 움직이는 글자(.cx-actor)는 큰 크기(최대 108px)로 그려 두고 0.15~0.2배로 줄여 보여주는데, will-change:transform 때문에
+   브라우저가 큰 글자 그림을 그대로 줄여 씀 → 획 굵기가 고르지 않음. 레티나에서는 티가 안 남.
+   → will-change 를 꺼서 줄어든 크기에 맞춰 글자를 다시 그리게 함. (되돌리려면 아래 한 줄만 지우면 됨) */
+html body.approved-culture .cx-actor{will-change:auto!important}
+/* 컬처 맨 아래 JOIN US 사진: 사진 아래쪽의 흐릿한 검은 물체(앞쪽에 걸린 컵·테이블 그림자)를 안 보이게 — KR·EN·JP (요청 2026-11-13)
+   사진 파일은 그대로 두고, 사진을 칸보다 1.255배 높게 놓아 아래 20%(원본 1362px 중 1085px 아래)를 칸 밖으로 잘라냄.
+   (되돌리려면 아래 한 줄만 지우면 됨) */
+html:not(#_i18n) body.approved-culture #culture-end .art-next__visual img{top:0!important;bottom:auto!important;height:125.5%!important;object-position:50% 0!important}
