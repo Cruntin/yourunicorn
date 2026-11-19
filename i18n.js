@@ -6,6 +6,14 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') picks.forEach(d => { if (d.open) { d.open = false; d.querySelector('summary').focus(); } }); });
 })();
 
+// 언어 선택(PC·모바일): 고른 언어를 yu_lang 쿠키에 1년 저장한다.
+// Cloudflare 리다이렉트 규칙이 루트(/) 접속 때 이 값대로 /jp/·/en/ 으로 보내거나 한국어에 머물게 한다(docs/cloudflare-language-redirect.md).
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('.approved-lang a[hreflang]');
+  const lang = a && a.getAttribute('hreflang');
+  if (lang === 'ko' || lang === 'en' || lang === 'ja') document.cookie = `yu_lang=${lang}; path=/; max-age=31536000; SameSite=Lax; Secure`;
+});
+
 // EN·JP 페이지: 사이트 스크립트가 넣는 화면 낭독기용 한국어 문구(메뉴 열기, 사진 설명 보기 등)를 그 언어로 바꿈.
 // 사이트 스크립트(approved-source.js, approved-v3.js)는 한국어 페이지와 같이 쓰므로 고치지 않고 여기서 바꾼다.
 (() => {
