@@ -54,10 +54,11 @@ http.host eq "yourunicorn.world" and http.request.uri.path eq "/" and (http.cook
 ```sh
 for al in "" "ja-JP,ja;q=0.9" "en-US,en;q=0.9" "zh-CN,zh;q=0.9" "en-US,en;q=0.9,ko;q=0.8" "ko-KR,ko;q=0.9"; do
   printf '%-28s ' "${al:-(없음)}"
-  curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' ${al:+-H "Accept-Language: $al"} https://yourunicorn.world/
+  curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' -H "Accept-Language:$al" https://yourunicorn.world/
 done
 ```
 기대값: 없음 200, ja 302→/jp/, en 302→/en/, zh 302→/en/, en+ko 200, ko 200.
+`-H "Accept-Language:"`처럼 값이 비면 curl은 그 헤더를 보내지 않는다. 그래서 "없음"도 헤더가 없는 요청이 되고, bash·zsh 어디서나 같게 동작한다. 예전 명령의 `${al:+-H "…"}`는 zsh에서 한 단어로 붙어서 헤더가 깨졌다.
 2026-11-19 적용 직후 이 값과 쿠키(`yu_lang=ko|en|ja`)·쿼리 유지·다른 경로 비이동·Googlebot·www/http/about 301까지 18가지를 확인했고, 실제 브라우저에서 언어를 고른 뒤 루트 재방문 시 고른 언어로 가는 것도 확인했다.
 
 ## 되돌리기
